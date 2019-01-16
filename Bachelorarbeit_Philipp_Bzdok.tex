@@ -1,0 +1,129 @@
+\author{Philipp Dominik Bzdok}
+
+\title{Bachelorarbeit Medientechnologie \linebreak \linebreak Authentifizierungsmethoden für elektronische Signaturen auf Grundlage der Handy-Signatur}
+
+\documentclass[11pt,a4paper,ngerman]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{fontspec}
+\usepackage[ngerman]{babel}
+
+\usepackage{color}
+\usepackage{tabularx}
+\usepackage{todonotes}
+\usepackage{caption}
+
+\usepackage[titles]{tocloft}
+\newlistof{listing}{lol}{Quellcodeverzeichnis}
+
+\usepackage[newfloat]{minted}
+\usemintedstyle{xcode}
+\setminted[java]{linenos,tabsize=2,breaklines,fontsize=\footnotesize,frame=lines,framesep=2ex,autogobble}
+\setminted[ruby]{linenos,tabsize=1,breaklines,fontsize=\footnotesize,frame=lines,framesep=2ex,autogobble}
+
+\usepackage{hyperref}
+\hypersetup{pdfborder={0 0 0}, breaklinks=true}
+
+\setlength{\parskip}{0.5em}
+\setlength{\parindent}{0em}
+
+\input{common-macros}
+
+% ----------------------------------------------------------------
+% Settings of Quellcodeverzeichnis
+% ----------------------------------------------------------------
+\setlength{\cftlistingnumwidth}{3em}
+\begin{document}
+\maketitle
+
+% ----------------------------------------------------------------
+% Preamble DE
+% ---------------------------------------------------------------- 
+\chapter*{Bachelorarbeit}
+\textbf{Thema:}
+
+Authentifizierungsmethoden für elektronische Signaturen auf Grundlage der Handy-Signatur
+\\[4ex]
+\textbf{Gutachter:}
+\begin{enumerate}
+    \item Prof. Dr.-Ing. Luigi Lo Iacono (Technische Hochschule Köln)
+    \item Dipl.-Ing. Tobias Wagner (n-design GmbH)
+\end{enumerate}
+\textbf{Zusammenfassung:}
+
+Was ein Abstract ist wird in der DIN Norm 1426 festgelegt: es ist ein Kurzreferat zur Inhaltsangabe. Die Definition des American National Standards Institute (ANSI) lautet: „An abstract is defined as an abbreviated accurate representation of the con-tents of a document". Es sollten 8-10 Zeilen Text folgen.
+\\[4ex]
+\textbf{Stichwörter:}
+
+Stichwort, Stichwort (hier sollten maximal 5 Stichwörter folgen)
+\\[4ex]
+\textbf{Datum:}
+
+\today
+\clearpage
+
+% ----------------------------------------------------------------
+% Preamble EN
+% ---------------------------------------------------------------- 
+\chapter*{Bachelors Thesis}
+\textbf{Title:}
+
+Authentication methods for electronic signatures based on mobile phone signature
+\\[4ex]
+\textbf{Reviewers:}
+\begin{enumerate}
+    \item Prof. Dr.-Ing. Luigi Lo Iacono (Technische Hochschule Köln)
+    \item Dipl.-Ing. Tobias Wagner (n-design GmbH)
+\end{enumerate}
+\textbf{Abstract:}
+
+Hier sollte eine Übersetzung des obigen Abstracts auf Englisch erfolgen (und kein kom-plett neuer Text). Auch hier bitte die Begrenzung auf maximal 10 Zeilen Text einhalten.
+\\[4ex]
+\textbf{Keywords:}
+
+(hier die Übersetzung der obigen Stichworte)
+\\[4ex]
+\textbf{Date:}
+
+\today
+\clearpage
+
+% ----------------------------------------------------------------
+% Table of contents
+% ---------------------------------------------------------------- 
+\tableofcontents
+\clearpage
+
+% ----------------------------------------------------------------
+% Quellcodeverzeichnis
+% ----------------------------------------------------------------
+\phantomsection
+\addcontentsline{toc}{chapter}{Quellcodeverzeichnis}
+\listoflistings
+\clearpage
+
+% ----------------------------------------------------------------
+% Content
+% ----------------------------------------------------------------
+
+\chapter{Einleitung}
+Im sechsten Fachsemester des Studiengangs Medientechnologie an der Technischen Hochschule Köln ist eine Praxis- \& Mobilitätsphase für jeden Studierenden vorgesehen.
+Dieses Semester kann relativ frei gestaltet werden, muss jedoch in einem fachverwandten Bereich absolviert werden und einen Umfang von 450 Stunden haben.
+Jeder Studierende hat die Möglichkeit ein Praktikum an der Technischen Hochschule oder in einer externen Firma zu machen. Bei Zweiterem muss der Student sich jedoch selbst um einen Platz bemühen.
+
+In meinem Fall ist die Entscheidung für ein externes Praktikum relativ früh gefallen, da ich seit dem 01. Februar 2018 bereits in der Kölner Firma \href{https://n-design.de/}{n-design GmbH} als Werkstudent im Bereich Software-Entwicklung angestellt bin. Die Firma n-design spezialisiert sich im Bereich ``e-Health''. Das aktuell wichtigste Projekt ist der \href{https://www.kococonnector.com/produkte/konnektor.html}{KocoConnector}, für den die Anwendungskomponente von n-design entwickelt wird:
+\begin{quote}
+    Die wichtigste Komponente in der Telematikinfrastruktur, der Konnektor als sicherer Zugangspunkt zu den Fachdiensten der Kostenträger, wurde durch die n-design mitentwickelt. Der Anwendungskonnektor, eine zentrale Teilkomponente des Konnektors, wurde vollständig durch n-design realisiert. Durch den Anwendungskonnektor wird die Kommunikation zu Clientsystemen und Kartenterminals, sowie auch die sichere Kommunikation in die Telematikinfrastruktur mittels Fachmodulen ermöglicht.
+\end{quote}
+Somit deckt der Konnektor viele Bereiche der Softwareentwicklung ab. Da das Projekt so vielseitig ist, gab es mir die Möglichkeit in den verschiedenen Bereichen wie \textit{Java}, \textit{embedded Systems}, \textit{Webschnittstellen}, \textit{Kryptographie} und \textit{GIT} zu arbeiten und mich dort weiterzubilden.
+
+Im folgenden werde ich meine Erfahrungen und Erkenntnisse, welche ich während des Praktikums bei n-design als aktives Mitglied der Softwareentwicklung sammeln durfte, darstellen.
+
+Test Ruby Code:
+\begin{listing}
+    \inputminted{ruby}{/Users/pbz/Documents/Projects/hasher_api/app/models/calculation.rb}
+    \caption{Calculation.rb}
+    \label{lst:Calculation}
+\end{listing}
+
+\end{document}
