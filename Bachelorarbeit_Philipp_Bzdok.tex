@@ -28,67 +28,14 @@ Authentifizierungsmethoden für digitale Fernsignaturen auf Grundlage der Handy-
 \setlength{\parskip}{0.5em}
 \setlength{\parindent}{0em}
 
-\input{common-macros}
-
-% ----------------------------------------------------------------
-% Settings of Quellcodeverzeichnis
-% ----------------------------------------------------------------
 \setlength{\cftlistingnumwidth}{3em}
+
+\input{common-macros}
 
 \begin{document}
 \maketitle
 
-% ----------------------------------------------------------------
-% Preamble DE
-% ---------------------------------------------------------------- 
-\chapter*{Bachelorarbeit}
-\textbf{Thema:}
-
-Authentifizierungsmethoden für digitale Fernsignaturen auf Grundlage der Handy-Signatur
-\\[4ex]
-\textbf{Gutachter:}
-\begin{enumerate}
-    \item Prof. Dr.-Ing. Luigi Lo Iacono (Technische Hochschule Köln)
-    \item Dipl.-Ing. Tobias Wagner (n-design GmbH)
-\end{enumerate}
-\textbf{Zusammenfassung:}
-
-Was ein Abstract ist wird in der DIN Norm 1426 festgelegt: es ist ein Kurzreferat zur Inhaltsangabe. Die Definition des American National Standards Institute (ANSI) lautet: „An abstract is defined as an abbreviated accurate representation of the con-tents of a document". Es sollten 8-10 Zeilen Text folgen.
-\\[4ex]
-\textbf{Stichwörter:}
-
-Stichwort, Stichwort (hier sollten maximal 5 Stichwörter folgen)
-\\[4ex]
-\textbf{Datum:}
-
-\today
-\clearpage
-
-% ----------------------------------------------------------------
-% Preamble EN
-% ---------------------------------------------------------------- 
-\chapter*{Bachelors Thesis}
-\textbf{Title:}
-
-Authentication methods for digital remote signatures based on mobile phone signatures
-\\[4ex]
-\textbf{Reviewers:}
-\begin{enumerate}
-    \item Prof. Dr.-Ing. Luigi Lo Iacono (Technische Hochschule Köln)
-    \item Dipl.-Ing. Tobias Wagner (n-design GmbH)
-\end{enumerate}
-\textbf{Abstract:}
-
-Hier sollte eine Übersetzung des obigen Abstracts auf Englisch erfolgen (und kein kom-plett neuer Text). Auch hier bitte die Begrenzung auf maximal 10 Zeilen Text einhalten.
-\\[4ex]
-\textbf{Keywords:}
-
-(hier die Übersetzung der obigen Stichworte)
-\\[4ex]
-\textbf{Date:}
-
-\today
-\clearpage
+\input{preamble}
 
 % ----------------------------------------------------------------
 % Vorwort
@@ -108,23 +55,12 @@ Hier möchte ich auf die Umstände der Abschlussarbeit eingehen und denen danken
 % ----------------------------------------------------------------
 
 \chapter{Einleitung}
-Digitale Signaturen nehmen in der heutigen Zeit eine wichtige Rolle in der Informationstechnik und der Informatik ein. Mithilfe von digitalen Signaturen ist es möglich beliebige Daten, zweifelsfrei Urheberschaft und Integrität nachzuweisen. Die Eigenschaften der Urheberschaft und Integrität sind besonders wichtig im juristischen Kontext der elektronischen Signatur. Der Begriff elektronische Signatur wird oft synonym zur digitalen Signatur verwendet, jedoch ist die elektronische Signatur ein juristischer Begriff, welcher erstmals in einem überarbeiteten Entwurf der EU-Richtlinie 1999/93/EG von der EU-Kommission verwendet wurde.\cite{eSigEU99} Der Begriff elektronische Signatur hingegen stammt aus der Mathematik beziehungsweise aus der Kryptographie.
+Digitale Signaturen nehmen in der heutigen Zeit eine wichtige Rolle in der Informationstechnik und somit im Alltag ein. Mit Hilfe von digitalen Signaturen ist es möglich beliebigen Daten zweifelsfrei Urheberschaft und Integrität nachzuweisen. Die Eigenschaften der Urheberschaft und Integrität sind besonders wichtig im juristischen Kontext der elektronischen Signatur, in welchem sie das Gegenstück zur handschriftlichen Unterschrift bildet. Der Begriff elektronische Signatur wird oft synonym zur digitalen Signatur verwendet, jedoch ist die elektronische Signatur ein juristischer Begriff, welcher erstmals in einem überarbeiteten Entwurf der EU-Richtlinie 1999/93/EG von der EU-Kommission verwendet wurde \cite{eSigEU99}. Der Begriff digitale Signatur hingegen stammt aus der Mathematik beziehungsweise aus der Kryptographie und bezeichnet einerseits ein asymmetrisches Kryptographieverfahren, aber anderseits den mathematischen Wert welcher durch das Kryptographieverfahren erzeugt wird.
 
+Digitale Signaturen werden bereits in einem breiten Spektrum von Anwendungen eingesetzt, wie zum Beispiel in PGP-Systemen\footnote{Pretty good Privacy - 1986 bis 1991 von Phil Zimmermann entwickelt.} oder Zertifikatsbasierten Systemen. Des weiteren werden digitale Signaturen immer häufiger in neuen Anwendungsbereichen eingesetzt. Eine besondere Anwendung, auf die ich im Laufe dieser Ausarbeitung explizit eingehen möchte, ist die österreichische \textit{Handy-Signatur}, welche es den Bürgern Österreichs ermöglicht, sich ohne zusätzliche Hardware wie Kartenlesegeräte, online per Handy auszuweisen oder Formulare und Dokumente elektronisch zu unterschreiben \cite{handySigOnline}. Die Besonderheit dieser digitalen Signatur ist, dass die Handy-Signatur eine qualifizierte elektronische Signatur auslöst und somit einer handgeschriebenen Unterschrift gleichgesetzt werden kann. Die für die Signatur benutzte Authentifizierungsmethode ist die mobile \textit{SMS-TAN}, jedoch wurde diese Authentifizierungsmethode bereits von \textit{NIST}\footnote{National Institute of Standards and Technology} eingeschränkt, da SMS nie dafür gemacht worden ist Geheimnisse zu übertragen \cite{NIST800-63B}.
 
-% ----------------------------------------------------------------
-% Quellcodeverzeichnis
-% ----------------------------------------------------------------
-\clearpage
-\phantomsection
-\addcontentsline{toc}{chapter}{Quellcodeverzeichnis}
-\listoflistings
-\clearpage
+Aus diesem Grund möchte ich in dieser Arbeit die Eigenschaften der \textit{Handy-Signatur} beleuchten und darauf basierend Alternativen evaluieren und implementieren. Mein Ziel ist es, die modernen Möglichkeiten von Multi-Faktor Authentifizierung im Kontext der digitalen Signatur zu Vergleichen und zu bewerten, um abschließend eine Aussage über die Tauglichkeit für den Anwendungsbereich \textit{Fernsignatur} machen zu können.
 
-% ----------------------------------------------------------------
-% Literaturverzeichnis
-% ----------------------------------------------------------------
-\addcontentsline{toc}{chapter}{Literaturverzeichnis}
-\bibliographystyle{plain}
-\bibliography{Literaturverzeichnis}
+\input{appendix}
 
 \end{document}
