@@ -1,6 +1,7 @@
 \author{Philipp Dominik Bzdok}
 
-\title{Bachelorarbeit Medientechnologie \linebreak \linebreak Authentifizierungsmethoden für elektronische Signaturen auf Grundlage der Handy-Signatur}
+\title{Bachelorarbeit Medientechnologie \linebreak \linebreak
+Authentifizierungsmethoden für digitale Fernsignaturen auf Grundlage der Handy-Signatur}
 
 \documentclass[11pt,a4paper,ngerman]{report}
 \usepackage[T1]{fontenc}
@@ -8,18 +9,7 @@
 \usepackage[ngerman]{babel}
 
 \usepackage{fancyhdr}
-\pagestyle{fancy}
-\fancyhf{} % Start with clearing everything in the header and footer
-\setlength{\headheight}{14pt}
-\fancyhead[L]{\textsl{\leftmark}}
-\fancyhead[R]{\textsl{\rightmark}}
-\fancyfoot[R]{\thepage}
-
-\fancypagestyle{plain}{%
-    \renewcommand{\headrulewidth}{0pt}%
-    \fancyhf{}%
-    \fancyfoot[R]{\thepage}%
-}
+\input{page-style}
 
 \usepackage{color}
 \usepackage{tabularx}
@@ -30,9 +20,7 @@
 \newlistof{listing}{lol}{Quellcodeverzeichnis}
 
 \usepackage[newfloat]{minted}
-\usemintedstyle{xcode}
-\setminted[java]{linenos,tabsize=2,breaklines,fontsize=\footnotesize,frame=lines,framesep=2ex,autogobble}
-\setminted[ruby]{linenos,tabsize=1,breaklines,fontsize=\footnotesize,frame=lines,framesep=2ex,autogobble}
+\input{minted-style}
 
 \usepackage{hyperref}
 \hypersetup{pdfborder={0 0 0}, breaklinks=true}
@@ -56,7 +44,7 @@
 \chapter*{Bachelorarbeit}
 \textbf{Thema:}
 
-Authentifizierungsmethoden für elektronische Signaturen auf Grundlage der Handy-Signatur
+Authentifizierungsmethoden für digitale Fernsignaturen auf Grundlage der Handy-Signatur
 \\[4ex]
 \textbf{Gutachter:}
 \begin{enumerate}
@@ -82,7 +70,7 @@ Stichwort, Stichwort (hier sollten maximal 5 Stichwörter folgen)
 \chapter*{Bachelors Thesis}
 \textbf{Title:}
 
-Authentication methods for electronic signatures based on mobile phone signature
+Authentication methods for digital remote signatures based on mobile phone signatures
 \\[4ex]
 \textbf{Reviewers:}
 \begin{enumerate}
@@ -103,35 +91,24 @@ Hier sollte eine Übersetzung des obigen Abstracts auf Englisch erfolgen (und ke
 \clearpage
 
 % ----------------------------------------------------------------
-% Table of contents
+% Vorwort
+% ---------------------------------------------------------------- 
+\chapter*{Vorwort}
+Hier möchte ich auf die Umstände der Abschlussarbeit eingehen und denen danken, die mir dabei geholfen haben.
+\clearpage
+
+% ----------------------------------------------------------------
+% Inhaltsverzeichnis
 % ---------------------------------------------------------------- 
 \tableofcontents
 \clearpage
 
 % ----------------------------------------------------------------
-% Content
+% Inhalt
 % ----------------------------------------------------------------
 
 \chapter{Einleitung}
-Im sechsten Fachsemester des Studiengangs Medientechnologie an der Technischen Hochschule Köln ist eine Praxis- \& Mobilitätsphase für jeden Studierenden vorgesehen.
-Dieses Semester kann relativ frei gestaltet werden, muss jedoch in einem fachverwandten Bereich absolviert werden und einen Umfang von 450 Stunden haben.
-Jeder Studierende hat die Möglichkeit ein Praktikum an der Technischen Hochschule oder in einer externen Firma zu machen. Bei Zweiterem muss der Student sich jedoch selbst um einen Platz bemühen.
-
-In meinem Fall ist die Entscheidung für ein externes Praktikum relativ früh gefallen, da ich seit dem 01. Februar 2018 bereits in der Kölner Firma \href{https://n-design.de/}{n-design GmbH} als Werkstudent im Bereich Software-Entwicklung angestellt bin. Die Firma n-design spezialisiert sich im Bereich ``e-Health''. Das aktuell wichtigste Projekt ist der \href{https://www.kococonnector.com/produkte/konnektor.html}{KocoConnector}, für den die Anwendungskomponente von n-design entwickelt wird:
-\begin{quote}
-    Die wichtigste Komponente in der Telematikinfrastruktur, der Konnektor als sicherer Zugangspunkt zu den Fachdiensten der Kostenträger, wurde durch die n-design mitentwickelt. Der Anwendungskonnektor, eine zentrale Teilkomponente des Konnektors, wurde vollständig durch n-design realisiert. Durch den Anwendungskonnektor wird die Kommunikation zu Clientsystemen und Kartenterminals, sowie auch die sichere Kommunikation in die Telematikinfrastruktur mittels Fachmodulen ermöglicht.
-\end{quote}
-Somit deckt der Konnektor viele Bereiche der Softwareentwicklung ab. Da das Projekt so vielseitig ist, gab es mir die Möglichkeit in den verschiedenen Bereichen wie \textit{Java}, \textit{embedded Systems}, \textit{Webschnittstellen}, \textit{Kryptographie} und \textit{GIT} zu arbeiten und mich dort weiterzubilden.\cite{greenwade93}
-
-Im folgenden werde ich meine Erfahrungen und Erkenntnisse, welche ich während des Praktikums bei n-design als aktives Mitglied der Softwareentwicklung sammeln durfte, darstellen.\footnote{Das ist sehr}
-
-\section{TestSection}
-Test Ruby Code:
-\begin{listing}
-    \caption{Calculation.rb - Klasse die eine Hashberechnung abbildet.}
-    \inputminted{ruby}{/Users/pbz/Documents/Projects/hasher_api/app/models/calculation.rb}
-    \label{lst:Calculation}
-\end{listing}
+Digitale Signaturen nehmen in der heutigen Zeit eine wichtige Rolle in der Informationstechnik und der Informatik ein. Mithilfe von digitalen Signaturen ist es möglich beliebige Daten, zweifelsfrei Urheberschaft und Integrität nachzuweisen. Die Eigenschaften der Urheberschaft und Integrität sind besonders wichtig im juristischen Kontext der elektronischen Signatur. Der Begriff elektronische Signatur wird oft synonym zur digitalen Signatur verwendet, jedoch ist die elektronische Signatur ein juristischer Begriff, welcher erstmals in einem überarbeiteten Entwurf der EU-Richtlinie 1999/93/EG von der EU-Kommission verwendet wurde.\cite{eSigEU99} Der Begriff elektronische Signatur hingegen stammt aus der Mathematik beziehungsweise aus der Kryptographie.
 
 
 % ----------------------------------------------------------------
