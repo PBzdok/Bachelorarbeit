@@ -55,7 +55,7 @@ Hier möchte ich auf die Umstände der Abschlussarbeit eingehen und denen danken
 % ----------------------------------------------------------------
 
 \chapter{Einleitung}
-Digitale Signaturen nehmen in der heutigen Zeit eine wichtige Rolle in der Informationstechnik und somit im Alltag ein. Mit Hilfe von digitalen Signaturen ist es möglich beliebigen Daten zweifelsfrei Urheberschaft und Integrität nachzuweisen. Die Eigenschaften der Urheberschaft und Integrität sind besonders wichtig im juristischen Kontext der elektronischen Signatur, in welchem sie das Gegenstück zur handschriftlichen Unterschrift bildet. Der Begriff elektronische Signatur wird oft synonym zur digitalen Signatur verwendet, jedoch ist die elektronische Signatur ein juristischer Begriff, welcher erstmals in einem überarbeiteten Entwurf der EU-Richtlinie 1999/93/EG von der EU-Kommission verwendet wurde \cite{eSigEU99}. Der Begriff digitale Signatur hingegen stammt aus der Mathematik beziehungsweise aus der Kryptographie und bezeichnet einerseits ein asymmetrisches Kryptographieverfahren, aber anderseits den mathematischen Wert welcher durch das Kryptographieverfahren erzeugt wird.
+Digitale Signaturen nehmen in der heutigen Zeit eine wichtige Rolle in der Informationstechnik und somit im Alltag ein. Mit Hilfe von digitalen Signaturen ist es möglich beliebigen Daten zweifelsfrei Integrität und Authentizität nachzuweisen. Die Eigenschaften der Integrität und Authentizität sind besonders wichtig im juristischen Kontext der elektronischen Signatur, in welchem sie das Gegenstück zur handschriftlichen Unterschrift bildet. Der Begriff elektronische Signatur wird oft synonym zur digitalen Signatur verwendet, jedoch ist die elektronische Signatur ein juristischer Begriff, welcher erstmals in einem überarbeiteten Entwurf der EU-Richtlinie 1999/93/EG von der EU-Kommission verwendet wurde \cite{eSigEU99}. Der Begriff digitale Signatur hingegen stammt aus der Mathematik beziehungsweise aus der Kryptographie und bezeichnet einerseits ein asymmetrisches Kryptographieverfahren, aber anderseits den mathematischen Wert welcher durch das Kryptographieverfahren erzeugt wird.
 
 Digitale Signaturen werden bereits in einem breiten Spektrum von Anwendungen eingesetzt, wie zum Beispiel in PGP-Systemen\footnote{Pretty good Privacy - 1986 bis 1991 von Phil Zimmermann entwickelt.} oder Zertifikatsbasierten Systemen. Des weiteren werden digitale Signaturen immer häufiger in neuen Anwendungsbereichen eingesetzt. Eine besondere Anwendung auf die ich im Laufe dieser Ausarbeitung explizit eingehen möchte, ist die österreichische \textit{Handy-Signatur}. Die \textit{Handy-Signatur} ermöglicht es den Bürgern Österreichs sich ohne zusätzliche Hardware, wie Kartenlesegeräte, online per Handy auszuweisen oder Formulare und Dokumente elektronisch zu unterschreiben \cite{handySigOnline}. Die Besonderheit dieser digitalen Signatur ist, dass die \textit{Handy-Signatur} eine qualifizierte elektronische Signatur auslöst und somit juristisch einer handgeschriebenen Unterschrift gleichgesetzt werden kann. Die für die Signatur benutzte Authentifizierungsmethode ist die mobile \textit{SMS-TAN}. Diese Authentifizierungsmethode wurde jedoch bereits von \textit{NIST}\footnote{National Institute of Standards and Technology} in ihrer Tauglichkeit eingeschränkt, da SMS nie dafür gemacht worden ist Geheimnisse zu übertragen \cite{mobileSec,NIST800-63B}. Trotz der mangelhaften Eignung von SMS als Kanal für OOB-Authentifizierung\footnote{Out-Of-Band Authentifizierung - Authentifizierung über separaten Kanal}, ist das SMS-OTP\footnote{One time password} die am meisten verbreitete Variante der multifaktor Authentifizierung \cite[Abb. 3]{fido17}.
 
@@ -67,7 +67,31 @@ Aus diesem Grund möchte ich in dieser Arbeit die Eigenschaften der Authentifizi
 Um die Eignung von Authentifizierungsmethoden bestimmen zu können, müssen erst einmal die Rahmenbedingung festgelegt werden. Die digitale Signatur und die \textit{Handy-Signatur} werden im folgenden beleuchtet, da dies der Anwendungsbereich ist, welchen die Authentifizierungsmethoden schützen sollen. Dazu stelle ich verschiedenste Signaturvarianten und ihre schützenswerten Merkmale dar. Nach der Bestimmung dieser Eigenschaften wird die Authentifizierung im Kontext der Signatur erläutert.
 
 \section{Hash-Funktionen}\label{Hash-Funktionen}
-\textit{Hash-Funktionen} spielen eine zentrale Rolle in der Welt der Kryptographie und \textit{digitalen Signaturen}. Allgemein bilden \textit{Hash-Funktionen} eine Nachricht beliebiger Länge auf einen Hash-Wert festen Länge ab. Der Hash-Wert ist abhängig von der gesamten Nachricht und sollte möglichst schnell berechenbar sein.
+\textit{Hash-Funktionen} spielen eine zentrale Rolle in der Welt der Kryptographie und \textit{digitalen Signaturen}. Allgemein bilden diese Funktionen eine Nachricht beliebiger (Bit-)Länge auf einen Hash-Wert festen Länge ab. Der Hash-Wert ist abhängig von der gesamten Nachricht und sollte möglichst schnell berechnet werden können. Eine weitere besondere Eigenschaft von kryptographischen \textit{Hash-Funktionen} ist die Kollisionsfreiheit, wie in \cite[S. 89]{krypt08} beschrieben: 
+\begin{quote}
+    ``Es sei $M$ eine Nachricht. Eine Hashfunktion $h$ ist \textit{schwach kollisionsfrei für $M$} [...], wenn es berechnungsmäßig praktisch unmöglich ist, eine Nachricht $M' \neq M$ mit $h(M)=h(M')$ zu finden. [...]
+    Eine Hashfunktion ist \textit{stark kollisionsfrei} [...], wenn es berechnungsmäßig praktisch unmöglich ist, Nachrichten $M$ und $M'$ mit $M' \neq M$ und $h(M')=h(M)$ zu finden.''
+\end{quote}
+Für die Verwendung von \textit{Hash-Funktionen} im Kontext der Signatur muss die Funktion eine sogenannte \textit{Einweg-Hash-Funktion} sein, wie in \cite[S. 99]{krypt08} beschrieben:
+\begin{quote}
+    Eine Hashfunktion ist eine \textit{Ein-Weg-Funktion} [...], wenn es für einen gegebenen Fingerabdruck $z$ berechnungsmäßig praktisch unmöglich ist, eine Nachricht $M$ mit $h(m)=z$ zu finden.
+\end{quote}
+Implizit ergibt sich aus der Forderung nach stark kollisionsfreien \textit{Hash-Funktionen} auch die Eigenschaften der Ein-Weg-Funktionen \cite[S. 99]{krypt08}.
+
+Die \textit{Hash-Funktionen} sind so wichtig für die \textit{digitalen Signaturen}, da bei den gängigen Signaturvarianten nur der Hash-Wert der Nachricht signiert wird und nicht die Nachricht selbst. Wichtige Funktionen in diesem Kontext, die in ihrer Sicherheit stetig durch führende Institutionen (NIST\footnote{National Institute of Standards and Technology - Secure Hash Standard \cite{shs180-4}}, BSI\footnote{Bundesamt für Sicherheit in der Informationstechnik \cite{bsi-tr-02102-1}}, etc.) geprüft werden, sind:
+\begin{table}[h]
+    \begin{tabularx}{\textwidth}{ |X|X| }
+        \hline
+        SHA2 & SHA-256, SHA-512/256, SHA-384 und SHA-512 \\
+        \hline
+        SHA3 & SHA3-256, SHA3-384, SHA3-512 \\
+        \hline
+    \end{tabularx}
+    \caption{Empfohlene Hash-Funktionen}
+    \label{table:Hashfunktionen}
+\end{table}
+
+Eine Signatur soll die Eigenschaften Integrität und Authentizität haben. Damit die Authentizität gewährleistet werden kann, muss erst die Integrität der Nachricht sicher gestellt werden. An dieser Stelle greifen die Eigenschaften der \textit{Hash-Funktion}. Dadurch, dass nur der Hash-Wert signiert wird, kann der Empfänger der Signatur durch eine eigene Hash-Wert Berechnung der Nachricht sicherstellen, dass die Nachricht nicht verändert worden ist.
 
 \section{Digitale Signatur}
 Als \textit{digitales Signatur} bezeichnet man im allgemeinen ein asymmetrisches Kryptosystem\footnote{Oberbegriff für Public-Key-Verschlüsselungsverfahren}. Bei asymmetrischen Kryptographiesystemen besitzt jeder Teilnehmer ein Schlüsselpaar, bestehend aus einem \textit{öffentlichen Schlüssel} und einem \textit{privaten Schüssel}. Da ausschließlich der Teilnehmer selbst Zugang zu seinem eigenen \textit{privaten Schlüssel} hat, eignet sich ein solches System hervorragend zur Sicherstellung von Authentizität von Daten und somit zur \textit{digitalen Signatur}. Es gibt Grundsätzlich zwei Arten eine Nachricht $M$ digital zu signieren, wobei $S$ und $V$ zwei Personen sind \cite[S. 28-29]{kryptSec11}:
