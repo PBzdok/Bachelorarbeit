@@ -61,12 +61,12 @@ Hier möchte ich auf die Umstände der Abschlussarbeit eingehen und denen danken
 \chapter{Einleitung}
 Digitale Signaturen nehmen in der heutigen Zeit eine wichtige Rolle in der Informationstechnik und somit im Alltag ein. Mit Hilfe von digitalen Signaturen ist es möglich beliebigen Daten zweifelsfrei Integrität und Authentizität nachzuweisen. Die Eigenschaften der Integrität und Authentizität sind besonders wichtig im juristischen Kontext der elektronischen Signatur, in welchem sie das Gegenstück zur handschriftlichen Unterschrift bildet. Der Begriff elektronische Signatur wird oft synonym zur digitalen Signatur verwendet, jedoch ist die elektronische Signatur ein juristischer Begriff, welcher erstmals in einem überarbeiteten Entwurf der EU-Richtlinie 1999/93/EG von der EU-Kommission verwendet wurde \cite{eSigEU99}. Der Begriff digitale Signatur hingegen stammt aus der Mathematik beziehungsweise aus der Kryptographie und bezeichnet einerseits ein asymmetrisches Kryptographieverfahren, aber anderseits den mathematischen Wert welcher durch das Kryptographieverfahren erzeugt wird.
 
-Digitale Signaturen werden bereits in einem breiten Spektrum von Anwendungen eingesetzt, wie zum Beispiel in PGP-Systemen\footnote{Pretty good Privacy - 1986 bis 1991 von Phil Zimmermann entwickelt.} oder Zertifikatsbasierten Systemen. Des weiteren werden digitale Signaturen immer häufiger in neuen Anwendungsbereichen eingesetzt. Eine besondere Anwendung auf die ich im Laufe dieser Ausarbeitung explizit eingehen möchte, ist die österreichische \textit{Handy-Signatur}. Die \textit{Handy-Signatur} ermöglicht es den Bürgern Österreichs sich ohne zusätzliche Hardware, wie Kartenlesegeräte, online per Handy auszuweisen oder Formulare und Dokumente elektronisch zu unterschreiben \cite{handySigOnline}. Die Besonderheit dieser digitalen Signatur ist, dass die \textit{Handy-Signatur} eine qualifizierte elektronische Signatur auslöst und somit juristisch einer handgeschriebenen Unterschrift gleichgesetzt werden kann. Die für die Signatur benutzte Authentifizierungsmethode ist die mobile \textit{SMS-TAN}. Diese Authentifizierungsmethode wurde jedoch bereits von \textit{NIST}\footnote{National Institute of Standards and Technology} in ihrer Tauglichkeit eingeschränkt, da SMS nie dafür gemacht worden ist Geheimnisse zu übertragen \cite{mobileSec,NIST800-63B}. Trotz der mangelhaften Eignung von SMS als Kanal für OOB-Authentifizierung\footnote{Out-Of-Band Authentifizierung - Authentifizierung über separaten Kanal}, ist das SMS-OTP\footnote{One time password} die am meisten verbreitete Variante der multifaktor Authentifizierung \cite[Abb. 3]{fido17}.
+Digitale Signaturen werden bereits in einem breiten Spektrum von Anwendungen eingesetzt, wie zum Beispiel in PGP-Systemen\footnote{Pretty good Privacy - 1986 bis 1991 von Phil Zimmermann entwickelt.} oder Zertifikatsbasierten Systemen. Des weiteren werden digitale Signaturen immer häufiger in neuen Anwendungsbereichen eingesetzt. Eine besondere Anwendung auf die ich im Laufe dieser Ausarbeitung explizit eingehen möchte, ist die österreichische \textit{Handy-Signatur}. Die \textit{Handy-Signatur} ermöglicht es den Bürgern Österreichs sich ohne zusätzliche Hardware, wie Kartenlesegeräte, online per Handy auszuweisen oder Formulare und Dokumente elektronisch zu unterschreiben \cite{handySigOnline}. Die Besonderheit dieser digitalen Signatur ist, dass die \textit{Handy-Signatur} eine qualifizierte elektronische Signatur auslöst und somit juristisch einer handgeschriebenen Unterschrift gleichgesetzt werden kann. Die für die Signatur benutzte Authentifizierungsmethode ist die mobile \textit{SMS-TAN}. Diese Authentifizierungsmethode wurde jedoch bereits von \textit{NIST}\footnote{National Institute of Standards and Technology} in ihrer Tauglichkeit eingeschränkt, da SMS nie dafür gemacht worden ist Geheimnisse zu übertragen \cite{mobileSec,NIST800-63B}. Trotz der mangelhaften Eignung von SMS als Kanal für OOB-Authentifizierung\footnote{Out-Of-Band Authentifizierung - Authentifizierung über separaten Kanal}, ist das SMS-OTP\footnote{One time password} die am meisten verbreitete Variante der Multi-Faktor Authentifizierung \cite[Abb. 3]{fido17}.
 
 Aus diesem Grund möchte ich in dieser Arbeit die Eigenschaften der Authentifizierungsmethode der \textit{Handy-Signatur} beleuchten und darauf basierend Alternativen evaluieren und prototypisch implementieren. Mein Ziel ist es, die modernen Möglichkeiten von Multi-Faktor Authentifizierung im Kontext der digitalen Signatur zu vergleichen und zu bewerten, um abschließend eine Aussage über die Tauglichkeit für den Anwendungsbereich \textit{Fernsignatur} machen zu können.
 
 \section*{Abgrenzung}
-Die digitale (Fern-)Signatur besteht aus vielen komplexen Verfahren, wie Hash-Funktionen, digitale Signaturen, Smartcards, uvm.. Diese möchte ich nur der Vollständigkeit halber erläutern. In diesen Bereichen werde ich mich nur auf bereits veröffentlichte Methodiken stützen und von ihnen gebrauch machen.
+Die digitale (Fern-)Signatur besteht aus vielen komplexen Verfahren, wie Hash-Funktionen, Kryptographieverfahren, Smartcards, uvm.. Diese möchte ich nur der Vollständigkeit halber erläutern. In diesen Bereichen werde ich mich nur auf bereits veröffentlichte Methodiken stützen und von ihnen gebrauch machen. Insbesondere setze ich bestimmte Rahmenbedingungen für die Implementierungen der Prototypen voraus, wie Gesicherte Übertragunskanäle, sichere Schlüsselerzeugung, sichere Schlüsselspeicherung und sichere Signaturerstellungseinheiten, da diese außerhalb der eigentlichen Authentifizierung fungieren.
 \clearpage
 
 
@@ -203,7 +203,7 @@ Falls $v = r$, ist die Signatur gültig.
 \subsubsection{Anmerkungen}
 Im Gegensatz zur RSA-Signaturvariante handelt es sich hierbei um einen probabilistischen Algorithmus, da die zufällige Wahl des \textit{privaten Schlüssels} mit $x \in \{1, \ldots, q - 1 \}$ essenziell ist. Wichte schützenswerte Merkmale dieses Verfahrens sind der \textit{öffentliche Schlüssel} $x$ und die Zufallszahl $k$ aus der Signaturerzeugung.
 
-\section{Mobile Signaturen}
+\section{Mobile Signaturen}\label{sec:MobileSignaturen}
 Durch den Entwurf der EU-Richtlinie 1999/93/EG wurde die gesetzliche Grundlage für rechtsverbindliche elektronische Signaturen geschaffen. Die Richtlinie sieht eine Gerüst von Anforderungen für die Technologien rund um die elektronische Signaturen vor, basierend auf einer Zertifizierungstelle\footnote{Auch Certificate Authority oder CA genannt.}, welche die \textit{öffentlichen Schlüssel} zertifiziert und so genannten ``sicheren Signaturerstellungseinheiten'' (SSEE), welche wiederrum die \textit{privaten Schlüssel} des Benutzers verwaltet. Die EU-Kommission unterscheidet dabei zwischen der elektronischen Signatur und der \textit{qualifizierten} elektronischen Signatur (QES). Eine QES muss folgende Anforderungen erfüllen \cite{eSigEU99}:
 \begin{enumerate}
     \item Sie ist eindeutig einem Unterzeichner zugeordnet.
@@ -211,28 +211,28 @@ Durch den Entwurf der EU-Richtlinie 1999/93/EG wurde die gesetzliche Grundlage f
     \item Sie wird mit Mitteln erstellt, die der Unterzeichner unter seiner alleinigen Kontrolle hat.
     \item Sie ist mit den Daten, auf die sie sich bezieht, so verknüpft, dass jede spätere Änderung der Daten erkennbar ist.
 \end{enumerate}
-Die klassische Variante eines SSEE ist die Smartcard, welche mit einem Kartenlesegerät angeschlossen an einem Computer bedient wird und die privaten Schlüssel enthält sowie die mathematischen Operationen einer Signatur durchführen kann. Diese Variante verhindert jedoch die Mobilität des Anwenders und erfordert zusätzliche Hardware, was folglich zu einer schwachen Adaption im privaten Sektor geführt hat. Eine Alternative dazu bieten die \textit{mobilen Signaturen}, welche durch mobile Endgeräte, wie z.B. Mobiltelefone, umgesetzt werden. Nach Rossnagel \cite{rossnagel}, können \textit{mobile Signaturen}   in zwei Varianten klassifiziert werden:
+Die klassische Variante einer SSEE ist die Smartcard, welche mit einem Kartenlesegerät angeschlossen an einem Computer bedient wird und die privaten Schlüssel enthält sowie die mathematischen Operationen einer Signatur durchführen kann. Diese Variante verhindert jedoch die Mobilität des Anwenders und erfordert zusätzliche Hardware, was folglich zu einer schwachen Adaption im privaten Sektor geführt hat. Eine Alternative dazu bieten die \textit{mobilen Signaturen}, welche durch mobile Endgeräte, wie z.B. Mobiltelefone, umgesetzt werden. Nach Rossnagel \cite{rossnagel}, können \textit{mobile Signaturen}   in zwei Varianten klassifiziert werden:
 \begin{itemize}
     \item \textbf{Serverseitige mobile Signaturen:} Bei der serverseitigen mobilen Signatur wird die Signatur auf einem (zentralen) Server erstellt. Dazu müssen die kryptographischen Schlüssel auf dem Server verwaltet werden. Der Benutzer muss durch besondere Authentifizierungsmethoden den Zugriff auf diese Schlüssel autorisieren.
     \item \textbf{Clientseitige mobile Signaturen:} Bei der clientseitigen mobilen Signatur wird die Signatur durch ein sicheres Signaturerstellungsgerät (z.B. Smartcard) auf dem Mobilgerät des Benutzers erstellt. Die kryptographischen Schlüssel liegen somit dem Benutzer selbst vor und müssen von diesem sicher verwaltet werden.
 \end{itemize}
 
-\section{Handy-Signatur}
+\section{Handy-Signatur}\label{sec:HandySignatur}
 Die \textit{Handy-Signatur} ist ein österreichisches (Fern-)Signaturverfahren und gehört der Gruppe der serverseitigen mobilen Signaturen an. Sie erlaubt es dem Benutzer sich eindeutig im Internet per Mobiltelefon zu authentifizieren. Die Signatur ist eine \textit{qualifizierte elektronische Signatur} und ist der handgeschriebenen Unterschrift per Gesetz\footnote{Nach EU-Richtlinie 1999/93/EG\cite{eSigEU99}} gleichgesetzt. Nach Angaben der A-Trust GmbH, welche für die Entwicklung und die technische Infrastruktur der \textit{Handy-Signatur} zuständig sind, sind aktuell ca. eine Millionen Nutzer registriert und es werden rund 18.000 Signaturen täglich ausgelöst \cite{atrustHSig}.
 \begin{quote}
     ``Egal ob Steuererklärung, Gewerbeanmeldung, Kindergeldbeantragung, FinanzOnline- oder ELGA-Abfragen: Mit der Handy-Signatur können bereits mehrere 100 Formulare digital unterschrieben werden. Amtswege und andere Rechtsgeschäfte, die die eindeutige Personenidentifikation erfordern, sind so an 365 Tagen im Jahr, 24 Stunden am Tag, möglich. Die UserInnen sind nicht mehr an die begrenzten Öffnungszeiten von Ämtern, Banken und Unternehmen gebunden.
 
     Im Zuge der digitalen Transformation wird eine sichere Authentifizierung im Internet immer wichtiger, um eine verlässliche Identifikation von Personen und Organisationen ortsunabhängig und länderübergreifend zu ermöglichen.'' \cite{atrustHSig}
 \end{quote}
-Da es sich bei der \textit{Handy-Signatur} um eine Fern-Signatur handelt, hat der Benutzer dabei keinen direkten Zugriff auf das Schlüsselpaar, welches zur Erzeugung der Signatur nötig ist. Dieses wird stattdessen von der A-Trust GmbH verwaltet. Das Auslösen der qualifizierten elektronischen Signatur über das Online-Portal läuft wie folgt ab (Siehe Abb. \ref{fig:HandySignaturablauf} \cite[S. 3, Abb. 1]{mobQes}):
+Da es sich bei der \textit{Handy-Signatur} um eine Fern-Signatur handelt, hat der Benutzer dabei keinen direkten Zugriff auf das Schlüsselpaar, welches zur Erzeugung der Signatur nötig ist. Dieses wird stattdessen von der A-Trust GmbH verwaltet. Das Auslösen der qualifizierten elektronischen Signatur über das Online-Portal läuft wie folgt ab (siehe Abb. \ref{fig:HandySignaturablauf} \cite[S. 3, Abb. 1]{mobQes}):
 \begin{enumerate}
     \item Benutzer greift auf eine Web-basierte Schnittstelle eines Service Providers zu.
     \item Service Provider schickt standardisierte Signaturanfrage an A-Trust.
-    \item Über eine Web-Schnittstelle des Service-Providers gibt der Benutzer seine Mobilfunknummer und sein Passwort ein und versendet sie über eine gesicherte HTTPS-Verbindung.
+    \item Über eine Web-Schnittstelle des Service-Providers gibt der Benutzer seine Mobilfunknummer und sein Passwort ein und versendet sie über eine gesicherte HTTPS-Verbindung an A-Trust.
     \item Eine Transaktionsnummer (TAN) wird von A-Trust an den Mobilfunkanbieter des Benutzers gesendet.
     \item Die TAN wird vom Mobilfunkanbieter an den Benutzer weitergeleitet.
-    \item Die TAN wird vom Benutzer über eine gesicherte Verbindung zu A-Trust übetragen.
-    \item Signaturerstellung wird von A-Trust durchgeführt und Ergebnis an den Service Provider gemeldet.
+    \item Die TAN wird vom Benutzer über eine gesicherte Verbindung zu A-Trust übertragen.
+    \item Signaturerstellung wird von A-Trust durchgeführt und eine standardisiertes Ergebnis an den Service Provider gemeldet.
     \item Service Provider meldet das Ergebnis an den Benutzer über die Web-Schnittstelle.
 \end{enumerate}
 \begin{figure}[htbp]
@@ -241,14 +241,87 @@ Da es sich bei der \textit{Handy-Signatur} um eine Fern-Signatur handelt, hat de
     \caption{Schematischer Ablauf der Handy-Signatur}
     \label{fig:HandySignaturablauf}
 \end{figure}
-Dabei ist zu beachten, dass dieser Vorgang nicht vom gleichen Endgerät ausgeführt werden soll, welches die SMS erhalten hat, da sonst keine \textit{qualifizierte elektronische Signatur} erstellt werden kann. Das Sicherheitskonzept der Anwendung basiert auf der Kombination von üblicher Passwortauthentifizierung und der \textit{Out-Of-Band Authentifizierung} als zweiten Faktor. Der Zugriff auf den \textit{privaten Schlüssel} zur Signaturerstellung muss also, erstens durch ein Passwort und zweitens durch den separaten Kanal des Mobilfunknetzes, autorisiert werden. Die eigentliche Signaturerstellung wird von A-Trust in einem zentralem HSM\footnote{Hardware Sicherheits-Modul} vorgenommen, welches die kryptographischen Schlüssel des Benutzers sicher verwahrt.
+Dabei ist zu beachten, dass dieser Vorgang nicht vom gleichen Endgerät ausgeführt werden soll, welches die SMS erhalten hat, da sonst keine \textit{qualifizierte} elektronische Signatur erstellt werden kann. Das Sicherheitskonzept der Anwendung basiert auf der Kombination von üblicher Passwortauthentifizierung und der \textit{Out-Of-Band Authentifizierung} als zweiten Faktor. Der Zugriff auf den \textit{privaten Schlüssel} zur Signaturerstellung muss also, erstens durch ein Passwort und zweitens durch den separaten Kanal des Mobilfunknetzes, autorisiert werden. Die eigentliche Signaturerstellung wird von A-Trust in einem zentralem HSM\footnote{Hardware Sicherheits-Modul} vorgenommen, welches die kryptographischen Schlüssel des Benutzers sicher verwahrt.
 \subsubsection{Vorteile}
 Der Vorteil der Anwendung, gegenüber der Verwendung der Chipkarte (Bürgerkarte), ist die Verwendung des SMS-TAN als Authentifizierungsmethode, statt eines Kartenlesegerätes am Computer des Benutzers. Somit soll eine maximale Verfügbarkeit der Anwendung sichergestellt werden, da die SMS-TAN von beliebigen Mobiltelefonen mit SIM-Karte empfangen werden kann. Außerdem bietet die \textit{Out-Of-Band Authentifizierung} einen zusätzlichen Schutz, falls der Computer des Benutzers kompromittiert sein sollte.
 \subsubsection{Nachteile}
 Genau in der Tatsache, dass der Authentifizierungscode über eine SMS empfangen wird, liegt auch der größte Nachteil des Verfahrens. Während man eine Chipkarte gewohnheitsmäßig sicher verwahrt und der Zugriff darauf nur über spezielle Hardware mit einem PIN geschehen kann, ist das Mobiltelefon ein Alltagsgegenstand. Des weiteren ist nicht das Endgerät selbst für den Empfang des Authentifizierungscodes zuständig, sondern die Mobiltelefonnummer welche über die SIM-Karte beim Telekomunikationsdienstleister hinterlegt ist. Da die Mobiltelefonnummer kein sicheres Merkmal von Besitz ist, bekommt das Passwort welches zur Anmeldung im Online-Portal genutzt wird eine hohe Bedeutung. Wer Zugriff auf die Mobiltelefonnummer und das Zugangspasswort erlangt, hat die Möglichkeit im Namen dieser Person rechtskräftige Verträge abzuschließen\todo{Wikipedia zitieren?}. 
 
 \section{Authentifizierung}
-asdasd
+Als \textit{Authentifizierung} bezeichnet man den Nachweiß einer behaupteten Eigenschaft einer Entität. Diese Entität kann beispielsweise eine Person oder ein Dokument sein. Das verwandte Wort \textit{Authentifikation} bezeichnet hingegen die Prüfung der Echtheit der Eigenschaft.
+\begin{quote}
+    ``Bei der Authentifikation gibt es zwei Rollen: Die eine Partei, die ihre Identität nachweisen will (Beweisende, ``prover'') und die andere Partei, die den Beweis nachprüft (Verifizierende, ``verifier''). Das Wort \textit{authentisieren} bezeichnet die beweisende Rolle und das Wort \textit{authentifizieren} bezeichnet die verifizierende Rolle. Mit dem Wort \textit{Authentifikation} werden beide Rollen zusammengefasst. Der Sprachgebrauch ist jedoch nicht ganz einheitlich.'' \cite[S. 149]{kryptSec11}
+\end{quote}
+\subsection{Methoden}
+Die Methoden der Authentifizierung können in drei Kategorien eingeteilt werden:
+\subsubsection{Wissen}
+Eine Person kann sich durch das Wissen einer bestimmten Information gegenüber einer zweiten Partei authentisieren. Die Charakteristika dieser Methode sind:
+\begin{itemize}
+    \item Kann vergessen werden
+    \item Kann vervielfältigt, weitergegeben oder verraten werden
+    \item Kann erraten werden
+    \item Preisgabe von Wissen kann kompromittiert werden
+    \item Keine Hilfsmittel nötig
+\end{itemize}
+Beispiele für Authentifikation anhand von Wissen sind:
+\begin{itemize}
+    \item Passwort
+    \item PIN
+    \item Sicherheitsfrage
+\end{itemize}
+\subsubsection{Besitz}
+Durch die Verwendung eines Besitztums kann sich eine Person gegenüber einer zweiten Partei authentisieren. Die Charakteristika dieser Methode sind:
+\begin{itemize}
+    \item Verwaltung von Besitz ist unsicher und mit Aufwand verbunden
+    \item Kann verloren werden
+    \item Kann gestohlen werden
+    \item Kann weitergegeben werden
+    \item Kann ersetzt werden
+    \item Kann sich selbst schützen
+\end{itemize}
+Beispiele von Authentifikation durch Besitz sind:
+\begin{itemize}
+    \item Schlüssel
+    \item USB Stick
+    \item Smartcard
+    \item Zertifikat
+    \item Transaktionsnummer (TAN)
+    \item Einmalpasswort (OTP)
+\end{itemize}
+\subsubsection{Körperliches Merkmal / Biometrie}
+Durch Merkmale des Benutzers selbst kann dieser sich gegenüber einer zweiten Partei authentisieren. Die Charakteristika dieser Methode sind:
+\begin{itemize}
+    \item Ist eine öffentliche Information
+    \item Wird durch Person immer mitgeführt
+    \item Kann nicht weitergegeben werden
+    \item Benötigt spezielle Technik zur Erkennung
+    \item Kann nur mit einer gewissen Wahrscheinlichkeit erkannt werden
+    \item Kann sich im Laufe der Zeit verändern
+\end{itemize}
+Beispiele von Authentifikation durch Biometrie sind:
+\begin{itemize}
+    \item Fingerabdruck
+    \item Gesichtserkennung
+    \item Stimmerkennung
+    \item Iriserkennung
+    \item Handschrift
+    \item Erbinformationen
+    \item Tippverhalten
+\end{itemize}
+Durch eine Kombination von den obigen Authentifizierungsmethoden entsteht eine sogenannte \textit{starke Authentisierung}. Ein gängiges Beispiel für eine Zwei-Faktor Authentifikation ist ein Geldautomat: Durch den Besitz der Chipkarte und das Wissen der PIN, kann eine Authentifikation in zwei Stufen durchgeführt werden.
+
+Die Authentifizierung im Kontext digitale Signaturen hat einen besonderen Stellenwert, da durch die Signatur rechtsverbindliche Verträge unterzeichnet werden können. Zum Schutz der kryptographischen Schlüssel, welche zur Signaturerstellung notwendig sind, wird die \textit{starke Authentisierung} implementiert. Dazu muss sich der Benutzer, im Falle der Handy-Signatur, dem Service Provider gegenüber mit Passwort (Wissen, erster Faktor) und SMS-TAN (Besitz, zweiter Faktor) authentisieren. Der Faktor der SMS-TAN hat noch die besondere Eigenschaft des separaten Kanals und bietet somit eine Erweiterung des Sicherheitsniveaus.
+
+\subsection{Vergleich}
+
+
+\chapter{Problematik der SMS-TAN}
+
+
+\chapter{Alternative Multi-Faktor Authentifizierung}
+
+
+\chapter{Zusammenfassung}
 
 \input{appendix}
 
