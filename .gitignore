@@ -26,3 +26,5 @@
 *.fls
 *.pdf
 *_minted*
+*.bcf
+*.run.xml
