@@ -222,6 +222,7 @@ Die klassische Variante einer SSEE ist die Smartcard, welche mit einem Kartenles
 \begin{itemize}
     \item \textbf{Serverseitige mobile Signaturen:} Bei der serverseitigen mobilen Signatur wird die Signatur auf einem (zentralen) Server erstellt. Dazu müssen die kryptographischen Schlüssel auf dem Server verwaltet werden. Der Benutzer muss durch besondere Authentifizierungsmethoden den Zugriff auf diese Schlüssel autorisieren.
     \item \textbf{Clientseitige mobile Signaturen:} Bei der clientseitigen mobilen Signatur wird die Signatur durch ein sicheres Signaturerstellungsgerät (z.B. Smartcard) auf dem Mobilgerät des Benutzers erstellt. Die kryptographischen Schlüssel liegen somit dem Benutzer selbst vor und müssen von diesem sicher verwaltet werden.
+    \item 
 \end{itemize}
 
 \section{Handy-Signatur}\label{sec:HandySignatur}
@@ -250,9 +251,9 @@ Da es sich bei der \textit{Handy-Signatur} um eine Fern-Signatur handelt, hat de
 \end{figure}
 Dabei ist zu beachten, dass dieser Vorgang nicht vom gleichen Endgerät ausgeführt werden soll, welches die SMS erhalten hat, da sonst keine \emph{qualifizierte} elektronische Signatur erstellt werden kann. Das Sicherheitskonzept der Anwendung basiert auf der Kombination von üblicher Passwortauthentifizierung und der \emph{Out-Of-Band Authentifizierung} als zweiten Faktor. Der Zugriff auf den \emph{privaten Schlüssel} zur Signaturerstellung muss also, erstens durch ein Passwort und zweitens durch den separaten Kanal des Mobilfunknetzes, autorisiert werden. Die eigentliche Signaturerstellung wird von A-Trust in einem zentralem HSM\footnote{Hardware Sicherheits-Modul} vorgenommen, welches die kryptographischen Schlüssel des Benutzers sicher verwahrt.
 \subsubsection{Vorteile}
-Der Vorteil der Anwendung, gegenüber der Verwendung der Chipkarte (Bürgerkarte), ist die Verwendung des SMS-TAN als Authentifizierungsmethode, statt eines Kartenlesegerätes am Computer des Benutzers. Somit soll eine maximale Verfügbarkeit der Anwendung sichergestellt werden, da die SMS-TAN von beliebigen Mobiltelefonen mit SIM-Karte empfangen werden kann. Außerdem bietet die \emph{Out-Of-Band Authentifizierung} einen zusätzlichen Schutz, falls der Computer des Benutzers kompromittiert sein sollte.
+Der Vorteil der Anwendung, gegenüber der Verwendung der Chipkarte (Bürgerkarte), ist die Verwendung des SMS-TAN als Authentifizierungsmethode, statt eines Kartenlesegerätes am Computer des Benutzers. Somit soll eine maximale Verfügbarkeit der Anwendung sichergestellt werden, da die SMS-TAN von beliebigen Mobiltelefonen mit SIM-Karte empfangen werden kann. Außerdem bietet die \emph{Out-Of-Band Authentifizierung} einen zusätzlichen Schutz, falls der Computer des Benutzers kompromittiert sein sollte. Außerdem kann die Signaturerstellung in einer kontrollierten Umgebung stattfinden und somit auch einfacher und effizienter abgesichert werden.
 \subsubsection{Nachteile}
-Genau in der Tatsache, dass der Authentifizierungscode über eine SMS empfangen wird, liegt auch der größte Nachteil des Verfahrens. Während man eine Chipkarte gewohnheitsmäßig sicher verwahrt und der Zugriff darauf nur über spezielle Hardware mit einem PIN geschehen kann, ist das Mobiltelefon ein Alltagsgegenstand. Des weiteren ist nicht das Endgerät selbst für den Empfang des Authentifizierungscodes zuständig, sondern die Mobiltelefonnummer welche über die SIM-Karte beim Telekomunikationsdienstleister hinterlegt ist. Da die Mobiltelefonnummer kein sicheres Merkmal von Besitz ist, bekommt das Passwort welches zur Anmeldung im Online-Portal genutzt wird eine hohe Bedeutung. Wer Zugriff auf die Mobiltelefonnummer und das Zugangspasswort erlangt, hat die Möglichkeit im Namen dieser Person rechtskräftige Verträge abzuschließen\todo{Wikipedia zitieren?}. 
+Genau in der Tatsache, dass der Authentifizierungscode über eine SMS empfangen wird, liegt auch der größte Nachteil des Verfahrens. Während man eine Chipkarte gewohnheitsmäßig sicher verwahrt und der Zugriff darauf nur über spezielle Hardware mit einem PIN geschehen kann, ist das Mobiltelefon ein Alltagsgegenstand. Des weiteren ist nicht das Endgerät selbst für den Empfang des Authentifizierungscodes zuständig, sondern die Mobiltelefonnummer welche über die SIM-Karte beim Telekomunikationsdienstleister hinterlegt ist. Da die Mobiltelefonnummer kein sicheres Merkmal von Besitz ist, bekommt das Passwort welches zur Anmeldung im Online-Portal genutzt wird eine hohe Bedeutung. Wer Zugriff auf die Mobiltelefonnummer und das Zugangspasswort erlangt, hat die Möglichkeit im Namen dieser Person rechtskräftige Verträge abzuschließen\todo{Wikipedia zitieren?}. Mit modernen Smartphones ist es zudem auch möglich, sowohl die Web-Schnittstelle aufzurufen, als auch die SMS mit der TAN zu empfangen. Somit wird das Sicherheitsniveau der separaten Kanäle wieder reduziert. 
 
 \section{Authentifizierung}
 Als \emph{Authentifizierung} bezeichnet man den Nachweiß einer behaupteten Eigenschaft einer Entität. Diese Entität kann beispielsweise eine Person oder ein Dokument sein. Das verwandte Wort \emph{Authentifikation} bezeichnet hingegen die Prüfung der Echtheit der Eigenschaft.
@@ -261,66 +262,110 @@ Als \emph{Authentifizierung} bezeichnet man den Nachweiß einer behaupteten Eige
 \end{quote}
 \subsection{Methoden}
 Die Methoden der Authentifizierung können in drei Kategorien eingeteilt werden:
-\subsubsection{Wissen}
-Eine Person kann sich durch das Wissen einer bestimmten Information gegenüber einer zweiten Partei authentisieren. Die Charakteristika dieser Methode sind:
-\begin{itemize}
-    \item Kann vergessen werden
-    \item Kann vervielfältigt, weitergegeben oder verraten werden
-    \item Kann erraten werden
-    \item Preisgabe von Wissen kann kompromittiert werden
-    \item Keine Hilfsmittel nötig
-\end{itemize}
-Beispiele für Authentifikation anhand von Wissen sind:
-\begin{itemize}
+\begin{description}
+    \item[Wissen:] Eine Person kann sich durch das Wissen einer bestimmten Information gegenüber einer zweiten Partei authentisieren. Für die Authentifizierung durch Wissen sind in der Regel keine Hilfsmittel notwendig, da sie auf immateriellem Gut basiert. Jedoch hat dies auch Nachteile, wie z.\,B. dass Informationen vergessen, vervielfältigt oder erraten werden können. Beispiele für Authentifikation anhand von Wissen sind:
+    \begin{itemize}
     \item Passwort
     \item PIN
     \item Sicherheitsfrage
-\end{itemize}
-\subsubsection{Besitz}
-Durch die Verwendung eines Besitztums kann sich eine Person gegenüber einer zweiten Partei authentisieren. Die Charakteristika dieser Methode sind:
-\begin{itemize}
-    \item Verwaltung von Besitz ist unsicher und mit Aufwand verbunden
-    \item Kann verloren werden
-    \item Kann gestohlen werden
-    \item Kann weitergegeben werden
-    \item Kann ersetzt werden
-    \item Kann sich selbst schützen
-\end{itemize}
-Beispiele von Authentifikation durch Besitz sind:
-\begin{itemize}
-    \item Schlüssel
-    \item USB Stick
-    \item Smartcard
-    \item Zertifikat
-    \item Transaktionsnummer (TAN)
-    \item Einmalpasswort (OTP)
-\end{itemize}
-\subsubsection{Körperliches Merkmal / Biometrie}
-Durch Merkmale des Benutzers selbst kann dieser sich gegenüber einer zweiten Partei authentisieren. Die Charakteristika dieser Methode sind:
-\begin{itemize}
-    \item Ist eine öffentliche Information
-    \item Wird durch Person immer mitgeführt
-    \item Kann nicht weitergegeben werden
-    \item Benötigt spezielle Technik zur Erkennung
-    \item Kann nur mit einer gewissen Wahrscheinlichkeit erkannt werden
-    \item Kann sich im Laufe der Zeit verändern
-\end{itemize}
-Beispiele von Authentifikation durch Biometrie sind:
-\begin{itemize}
-    \item Fingerabdruck
-    \item Gesichtserkennung
-    \item Stimmerkennung
-    \item Iriserkennung
-    \item Handschrift
-    \item Erbinformationen
-    \item Tippverhalten
-\end{itemize}
+    \end{itemize} 
+\end{description}
+\begin{description}
+    \item[Besitz:] Durch die Verwendung eines Besitztums kann sich eine Person gegenüber einer zweiten Partei authentisieren. Besitz ist immer etwas materielles und kann deshalb nicht einfach vervielfältigt werden. Der Besitzer muss jedoch die sichere Verwahrung sicherstellen, da der Gegenstand sonst verloren gehen oder sogar gestohlen werden könnte. Es liegt auch in der Verantwortung des Besitzers den Gegenstand, mit dem er sich authentisiert, nicht weiterzugeben. Beispiele von Authentifikation durch Besitz sind:
+    \begin{itemize}
+        \item Schlüssel
+        \item USB Stick
+        \item Smartcard
+        \item Zertifikat
+        \item Transaktionsnummer (TAN)
+        \item Einmalpasswort (OTP)
+    \end{itemize}
+\end{description}
+\begin{description}
+    \item[Körperliches Merkmal / Biometrie:] Durch Merkmale des Benutzers selbst kann dieser sich gegenüber einer zweiten Partei authentisieren. Biometrische Merkmale sind in der Regel öffentliche Informationen, wie Gesichts- oder Augenmerkmale, die der Benutzer immer mit sich trägt. Diese Eigenschaften können nicht weitergegeben werden, benötigen für die Erkennung jedoch in den meisten Fällen spezielle Technik. Außerdem kann die Erkennung nur mit einer Gewissen Wahrscheinlichkeit erfolgen, da sich die Merkmale im Laufe der Zeit verändern können. Beispiele von Authentifikation durch Biometrie sind:
+    \begin{itemize}
+        \item Fingerabdruck
+        \item Gesichtserkennung
+        \item Stimmerkennung
+        \item Iriserkennung
+        \item Handschrift
+        \item Erbinformationen
+        \item Tippverhalten
+    \end{itemize}
+\end{description}
 Durch eine Kombination von den obigen Authentifizierungsmethoden entsteht eine sogenannte \emph{starke Authentisierung}. Ein gängiges Beispiel für eine Zwei-Faktor Authentifikation ist ein Geldautomat: Durch den Besitz der Chipkarte und das Wissen der PIN, kann eine Authentifikation in zwei Stufen durchgeführt werden.
 
-Die Authentifizierung im Kontext digitale Signaturen hat einen besonderen Stellenwert, da durch die Signatur rechtsverbindliche Verträge unterzeichnet werden können. Zum Schutz der kryptographischen Schlüssel, welche zur Signaturerstellung notwendig sind, wird die \emph{starke Authentisierung} implementiert. Dazu muss sich der Benutzer, im Falle der Handy-Signatur, dem Service Provider gegenüber mit Passwort (Wissen, erster Faktor) und SMS-TAN (Besitz, zweiter Faktor) authentisieren. Der Faktor der SMS-TAN hat noch die besondere Eigenschaft des separaten Kanals und bietet somit eine Erweiterung des Sicherheitsniveaus.
+Die Authentifizierung im Kontext digitale Signaturen hat einen besonderen Stellenwert, da durch die Signatur rechtsverbindliche Verträge unterzeichnet werden können. Zum Schutz der kryptographischen Schlüssel, welche zur Signaturerstellung notwendig sind, wird die \emph{starke Authentisierung} implementiert. Dazu muss sich der Benutzer, im Falle der Handy-Signatur, der A-Trust GmbH gegenüber mit Passwort (Wissen, erster Faktor) und SMS-TAN (Besitz, zweiter Faktor) authentisieren. Der Faktor der SMS-TAN hat noch die besondere Eigenschaft des separaten Kanals und bietet somit eine Erweiterung des Sicherheitsniveaus.
 
 \subsection{Vergleich}
+Die oben genannten Authentifizierungsmethoden werden im folgenden in den Kategorien \emph{Benutzerfreundlichkeit}, \emph{Komplexität} und \emph{Sicherheit} im Kontext der serverseitigen mobilen Signatur verglichen. Die Kategorie Benutzerfreundlichkeit wurde gewählt, da in erster Linie der Benutzer eine Authentisierung durchführen muss. Die Kategorie Komplexität hingegen dient zur Analyse der technischen Umsetzungsmöglichkeiten. Im Anschluss wird die Sicherheit der Verfahren verglichen, wobei die Ergebnisse der Kategorien Benutzerfreundlichkeit und Komplexität eingehen werden.
+\subsubsection{Benutzerfreundlichkeit}
+Die Marktanalyse der FIDO Alliance \cite{fido17} zeigt eindeutig, dass die Authentifizierung durch Wissen (insbesondere Passwörter) deutlich verbreiteter ist als die übrigen Methoden. Authentifizierung durch Passwörter und PIN sind heutzutage überall anzutreffen und nicht mehr wegzudenken. Diese Adaption zeigt eindeutig, dass sich diese Authentifizierungsmethode in Bezug Benutzerfreundlichkeit ebenfalls durchsetzen kann. Für diese Methode braucht der Benutzer im idealfall keinerlei Hilfsmittel. Die Biometrische Authentifikation ist ebenfalls, aus Sicht des Benutzers, unkompliziert und erfordert keine Hilfsmittel. Lediglich das Gerät an welchem der Benutzer die Authentifizierung durchführen möchte muss die Technik dafür bereitstellen, z.\,B. der Fingerabdrucksensor des Smartphones. Stehen diese technischen Vorraussetzungen jedoch nicht zur Verfügung, muss der Benutzer eine Alternative wählen oder die entsprechende Hardware zur Verfügung stellen. Das wiederrum verringert die Benutzerfreundlichkeit dieser Methode. Grundsätzlich ist die Authentifizierung durch Besitz, die Methode mit der geringsten Benutzerfreundlichkeit, da der Benutzer diesen für die Anwendung anschaffen und verwalten muss. 
 
+Zusammenfassend werden die Eigenschaften der Authentifizierungsmethoden im Bezug zur Benutzerfreundlichkeit in Tabelle \ref{table:Benutzerfreundlichkeit} verglichen.
+\begin{table}[htbp]
+    \begin{tabularx}{\textwidth}{ lXX }
+        \toprule
+        Methode & Vorteile & Nachteile \\ 
+        \midrule
+        Wissen & Benutzer Benötigt keine Hilfsmittel & Kann vom Benutzer vergessen werden \\
+         & immateriell & Eventuell schwierig sich viele Passwörter zu merken \\
+        \midrule
+        Besitz & Kann bekannter Gegenstand sein (z.\,B. Chipkarte) & Muss sicher verwahrt werden, da materiell \\
+         & & Anschaffung (Kosten) \\
+         & & Kann verloren gehen \\
+         & & Kann gestohlen werden \\
+        \midrule
+        Biometrie & Merkmale trägt Benutzer immer bei sich & Merkmale sind öffentliche Informationen \\
+         & & Gerät muss Funktionalität bereitstellen \\
+        \bottomrule
+    \end{tabularx}
+    \caption{Vergleich der Benutzerfreundlichkeit von Authentifizierungsmethoden}
+    \label{table:Benutzerfreundlichkeit}
+\end{table}
+\subsubsection{Komplexität}
+Die Komplexität einer Authentifizierungsmethode hängt im Wesentlichen vom Maß der Sicherheit ab, welche diese bietet. Jedoch spielen auch andere Faktoren eine große Rolle, wie z.\,B. die Varianz der Eingangsparameter und die Verfügbarkeit von Hardware und Software. Ein Beispiel für eine Authentifizierungsmethode mit geringer Komplexität ist die Passwortauthentifizierung (Wissen). Dieses Verfahren stützt sich auf die sichere Übertragung und der sicheren Speicherung des Passwortes, da der Benutzer vorgibt wie sicher das Passwort ist. Eine wichtige Komponente der Authentifizierung durch Wissen sind die in Kapitel \ref{sec:Hash-Funktionen} beschriebenen Hash-Funktionen, da das Wissen welches zur Authentisierung nötig ist, gesichert\footnote{gesichert im Sinne von nicht wiederherstellbar} gespeichert werden muss.
+
+Im Gegensatz zur Authentifikation mit Wissen, sind die Authentifikation mit Besitz und Biometrie wesentlich komplexer. Die Authentifikation mit Besitz, setzt bestimmte Hardware vorraus, z.\,B. Chipkarten, USB-Sticks oder Mobiltelefone, welche nach bestimmten Spezifikationen gefertigt sein müssen. Außerdem muss die Kommunikation mit diesen Komponenten mit speziellen Protokollen erfolgen. Ebenfalls ist die Komplexität der biometrischen Authentifikation komplexer, da spezielle Verfahren, Software und Hardware eingesetzt werden müssen um Merkmale des Benutzers zuverlässig erkennen zu können. Die Varianz der Eingangsparameter einer biometrischen Authentifikation ist ebenfalls enorm, so können z.\,B. die Eigenschaften des Gesichts oder die Beleuchtungssituation sich verändern. Insgesamt ist die Passwortauthentifizierung die am wenigsten komplexe Variante, gefolgt von der Authentifikation durch Besitz und abschließend ist die Authentifikation durch Biometrie die komplexeste Methode, wie in Tabelle \ref{table:Komplexität} dargestellt.
+\begin{table}[htbp]
+    \begin{tabularx}{\textwidth}{ lXX }
+        \toprule
+        Methode & Vorteile (geringe Komplexität) & Nachteile (hohe Komplexität) \\ 
+        \midrule
+        Wissen & Nur (Text-)Zeichen auf Benutzer-Ebene & Sichere Speicherung \\
+         & & Sichere Übertragung \\
+        \midrule
+        Besitz & Kann bekannter Gegenstand sein (z.\,B. Chipkarte, Mobiltelefon) & Muss bestimmte Sicherheitsanforderungen erfüllen \\
+         & & Zugriff über spezielle Protokolle \\
+         & & Fertigung \\
+        \midrule
+        Biometrie & & Varianz der Prüfungsparameter \\
+         & & Spezielle Client-Software \\
+         & & Spezielle Client-Hardware \\
+        \bottomrule
+    \end{tabularx}
+    \caption{Vergleich der Komplexität von Authentifizierungsmethoden}
+    \label{table:Komplexität}
+\end{table}
+\subsubsection{Sicherheit}
+Die wohl wichtigste Eigenschaft der vorgestellten Authentifizierungsmethoden ist die Sicherheit. Diese ist je nach Methode unterschiedlich stark und beeinflussbar. Allgemein kann man sagen, dass keine Authentifizierungsmethode hundert-prozentig sicher ist, jedoch ergeben sich je nach Anwendungsfall unterschiedliche Anforderungen an das Sicherheitsniveau der Authentifizierungsmethode. Im folgenden möchte ich eine Sammlung von gängigen Authentifizierungsmethoden darstellen um eine Übersicht im Kontext der Sicherheit zu bieten:
+\begin{table}[htbp]
+    \begin{tabularx}{\textwidth}{ llXX }
+        \toprule
+        Methode & Faktor & Beschreibung & Schwachstellen \\
+        \midrule
+        Passwort, PIN & Wissen & Fixer Wert, welcher beliebig Kombination von Alphanummerische Zeichen enthält & Kann abgefangen, gestohlen, erraten oder erzwungen\footnote{Brute-Force Angriff} werden \\
+        Sicherheitsfrage & Wissen & Frage, welche nur der Benutzer beantworten kann & Kann abgefangen, gestohlen oder erraten werden \\
+        Hardware-basiertes OTP & Besitz & Separates Gerät, welches Passwort zur einmaligen Benutzung generiert & Kann abgefangen oder gestohlen werden \\
+        Software-basiertes OTP & Besitz & Anwendung auf Endgerät des Benutzers (App, E-Mail Client, Browser), welches Password zur einmaligen Benutzung erzeugt & Kann abgefangen oder gestohlen (Gerät) werden \\
+        SMS-basiertes OTP & Besitz & Passwort zur einmaligen Verwendung empfangen per SMS Textnachricht & Kann abgefangen, mitgelesen (Malware) oder gestohlen (Gerät) werden \\
+        Smartcard & Besitz & Eine Karte welche eine SSEE enthält und die PKI nutzt & Kann gestohlen werden \\
+        Sicherheitsschlüssel & Besitz & Kompaktes Gerät welches eine SSEE enthält und die PKI nutzt & Kann gestohlen werden \\
+        Geräte Fingerabdruck & Besitz & Prozess zur Wiedererkennung von Geräten durch Cookies und anderen Markern & Geräteeigenschaften können emuliert oder Cookies gestohlen werden
+    \end{tabularx}
+    \caption{Übersicht über gängige Authentifizierungsmethoden}
+    \label{table:Sicherheit}
+\end{table}
 
 \chapter{Problematik der SMS-TAN}
 
