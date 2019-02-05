@@ -387,14 +387,19 @@ Vergleicht man die Eigenschaften und Schwachstellen der drei individuellen Metho
 \chapter{Problematik der SMS-TAN}
 \section{SMS-TAN}
 Die \textit{SMS-TAN} ist eine Authentifizierungsmethode, welche zur Kategorie der Authentifizierung durch Besitztum gehört. Um diese Methode verwenden zu können muss der Benutzer seine Mobiltelefonnummer im Vorfeld beim Service-Provider registrieren und anschließend bestätigen wie in Abbildung \ref{fig:SMS-TAN_Registrierung} dargestellt.
-Die Transaktionsnummer wird für genau eine Anwendung generiert und an den Benutzer per SMS an sein Mobiltelefon gesendet. Der Benutzer kann dann die Nummer auslesen und sie abschließend innerhalb einiger Minuten beim Service-Provider\footnote{Google, Amazon, A-Trust, etc. - Meist über eine Web-Schnittstelle} eingeben.
+Die Transaktionsnummer wird für genau eine Anwendung generiert und an den Benutzer per SMS an sein Mobiltelefon gesendet. Der Benutzer kann dann die Nummer auslesen und sie abschließend innerhalb einiger Minuten beim Service-Provider\footnote{Google, Amazon, A-Trust, etc. - Meist über eine Web-Schnittstelle} eingeben. Die \textit{SMS-TAN} wird in den aller meisten Fällen als Zwei-Faktor Authentifikation zusammen mit einem Passwort verwendet \cite{fido17}. Der typische Use-Case dieser Methode sieht vor, dass der Benutzer sich erst mit einem Passwort authentifiziert bevor er eine SMS mit dem TAN zugesendet bekommt. Die TAN fungiert somit als Einmal-Passwort und wird über den separaten Kanal des Mobilfunknetzes vom Benutzer empfangen. Abbildung \ref{fig:SMS-TAN} zeigt schematisch den Ablauf einer generischen Zwei-Faktor Authentifizierung mit Passwort und \textit{SMS-TAN}. Die Abläufe der Registrierung und der Authentifizierung unterscheiden sich nur im ersten Schritt und bieten dem Benutzer somit eine einfache Methode sich zusätzlich gegen unautorisierten Zugriff abzusichern.
 \begin{figure}[htbp]
     \centering
         \includegraphics[width=\textwidth]{Abbildungen/Ablauf_SMS-TAN_Registrierung.png}
     \caption{Schematischer Ablauf der SMS-TAN Registrierung}
     \label{fig:SMS-TAN_Registrierung}
 \end{figure}
-
+\begin{figure}[htbp]
+    \centering
+        \includegraphics[width=\textwidth]{Abbildungen/Ablauf_SMS-TAN.png}
+    \caption{Schematischer Ablauf der SMS-TAN Authentifizierung}
+    \label{fig:SMS-TAN}
+\end{figure}
 
 \chapter{Alternative Multi-Faktor Authentifizierung}
 
