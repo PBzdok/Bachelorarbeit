@@ -383,7 +383,17 @@ Vergleicht man die Eigenschaften und Schwachstellen der drei individuellen Metho
     \label{table:Sicherheit}
 \end{table}
 
+
 \chapter{Problematik der SMS-TAN}
+\section{SMS-TAN}
+Die \textit{SMS-TAN} ist eine Authentifizierungsmethode, welche zur Kategorie der Authentifizierung durch Besitztum gehört. Um diese Methode verwenden zu können muss der Benutzer seine Mobiltelefonnummer im Vorfeld beim Service-Provider registrieren und anschließend bestätigen wie in Abbildung \ref{fig:SMS-TAN_Registrierung} dargestellt.
+Die Transaktionsnummer wird für genau eine Anwendung generiert und an den Benutzer per SMS an sein Mobiltelefon gesendet. Der Benutzer kann dann die Nummer auslesen und sie abschließend innerhalb einiger Minuten beim Service-Provider\footnote{Google, Amazon, A-Trust, etc. - Meist über eine Web-Schnittstelle} eingeben.
+\begin{figure}[htbp]
+    \centering
+        \includegraphics[width=\textwidth]{Abbildungen/Ablauf_SMS-TAN_Registrierung.png}
+    \caption{Schematischer Ablauf der SMS-TAN Registrierung}
+    \label{fig:SMS-TAN_Registrierung}
+\end{figure}
 
 
 \chapter{Alternative Multi-Faktor Authentifizierung}
