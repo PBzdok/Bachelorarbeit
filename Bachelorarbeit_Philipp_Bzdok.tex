@@ -227,21 +227,19 @@ Die klassische Variante einer SSEE ist die Smartcard, welche mit einem Kartenles
     \item \textbf{Serverseitige mobile Signaturen:} Bei der serverseitigen mobilen Signatur wird die Signatur auf einem (zentralen) Server erstellt. Dazu müssen die kryptographischen Schlüssel auf dem Server verwaltet werden. Der Benutzer muss durch besondere Authentifizierungsmethoden den Zugriff auf diese Schlüssel autorisieren.
     \item \textbf{Clientseitige mobile Signaturen:} Bei der clientseitigen mobilen Signatur wird die Signatur durch ein sicheres Signaturerstellungsgerät (z.B. Smartcard) auf dem Mobilgerät des Benutzers erstellt. Die kryptographischen Schlüssel liegen somit dem Benutzer selbst vor und müssen von diesem sicher verwaltet werden.
 \end{itemize}
+\subsection{eIDAS}
+Die Richtlinie 1999/93/EG der EU-Kommission aus dem Jahre 1999 wurde am 17. September 2014 durch die neue EU-Verordnung Nr.\,910/2014 namens \textit{eIDAS}\footnote{\textbf{e}lectronic \textbf{ID}entification, \textbf{A}uthentication and trust \textbf{S}ervices} aufgehoben. Mit der \emph{eIDAS}-Verordnung wurde auch das Signaturgesetz durch das Vertrauensdientegesetz abgelöst, welches am 29. Juli 2017 in Kraft getreten ist. Außerdem führt die Verordnung das \textit{elektronische Siegel} ein, welches technisch vergleichbar mit der elektronischen Signatur ist. Jedoch ist die elektronische Signatur im wesentlichen eine Willenserklärung und bezieht sich auf eine natürliche Person, während das \textit{elektronische Siegel} sich auf eine juristische Person bezieht und somit als Herkunftsnachweiß dienen kann. ``Es kann überall dort eingesetzt werden, wo eine persönliche Unterschrift nicht notwendig, aber der Nachweis der Authentizität gewünscht ist (z. B. bei amtlichen Bescheiden, Urkunden, Kontoauszügen etc.).''\cite{eu910/2014Website} Ein wesentliches Ziel der \textit{eIDAS}-Verordnung ist die Stärkung des Vertrauens in elektronische Transaktionen, auch über Ländergrenzen den EU hinaus. \cite{eu910/2014}.
+
+Die bereits genannten sicheren Signaturerstellungseinheiten werden von der \textit{eIDAS}-Verordnung zusätzlich als \emph{qualifizierte} Signaturerstellungseinheiten (QSEEs) re-definiert und müssen nach den \textit{Common Criteria} zertifiziert werden um gültige \emph{qualifizierten} elektronischen Signaturen erstellen zu können. Die Anforderungen an eine \emph{qualifizierten} elektronischen Signatur habe sich jedoch nicht geändert, wie in Artikel 26 der \textit{eIDAS}-Verordnung beschrieben \cite[Article 26]{eidasWebsite}.
 
 \section{Handy-Signatur}\label{sec:HandySignatur}
-Die \textit{Handy-Signatur} ist ein österreichisches (Fern-)Signaturverfahren und gehört der Gruppe der serverseitigen mobilen Signaturen an. Sie erlaubt es dem Benutzer sich eindeutig im Internet per Mobiltelefon zu authentifizieren. Die Signatur ist eine \emph{qualifizierte} elektronische Signatur und ist der handgeschriebenen Unterschrift per Gesetz\footnote{Nach EU-Richtlinie 1999/93/EG\cite{eSigEU99}} gleichgesetzt. Nach Angaben der A-Trust GmbH, welche für die Entwicklung und die technische Infrastruktur der \textit{Handy-Signatur} zuständig sind, sind aktuell ca. eine Million Nutzer registriert und es werden nach Angaben des Betreibers rund 18.000 Signaturen täglich ausgelöst \cite{atrustHSig}.
+Die \textit{Handy-Signatur} ist ein österreichisches (Fern-)Signaturverfahren und gehört der Gruppe der serverseitigen mobilen Signaturen an. Sie erlaubt es dem Benutzer sich eindeutig im Internet per Mobiltelefon zu authentifizieren. Die Signatur ist eine \emph{qualifizierte} elektronische Signatur und ist der handgeschriebenen Unterschrift per Gesetz\footnote{nach eIDAS-Verordnung} gleichgesetzt. Nach Angaben der A-Trust GmbH, welche für die Entwicklung und die technische Infrastruktur der \textit{Handy-Signatur} zuständig sind, sind aktuell ca. eine Million Nutzer registriert und es werden nach Angaben des Betreibers rund 18.000 Signaturen täglich ausgelöst \cite{atrustHSig}.
 \begin{quote}
     ``Egal ob Steuererklärung, Gewerbeanmeldung, Kindergeld-Beantragung, FinanzOnline oder ELGA-Abfragen: Mit der Handy-Signatur können bereits mehrere 100 Formulare digital unterschrieben werden. Amtswege und andere Rechtsgeschäfte, die die eindeutige Personenidentifikation erfordern, sind so an 365 Tagen im Jahr, 24 Stunden am Tag, möglich. Die UserInnen sind nicht mehr an die begrenzten Öffnungszeiten von Ämtern, Banken und Unternehmen gebunden.
 
     Im Zuge der digitalen Transformation wird eine sichere Authentifizierung im Internet immer wichtiger, um eine verlässliche Identifikation von Personen und Organisationen ortsunabhängig und länderübergreifend zu ermöglichen.'' \cite{atrustHSig}
 \end{quote}
 Da es sich bei der \textit{Handy-Signatur} um eine serverseitige mobile Signatur handelt, hat der Benutzer dabei keinen direkten Zugriff auf das Schlüsselpaar, welches zur Erzeugung der Signatur nötig ist. Dieses wird stattdessen von der A-Trust GmbH verwaltet. Das Auslösen der qualifizierten elektronischen Signatur über das Online-Portal läuft wie folgt ab (siehe Abb.~\ref{fig:HandySignaturablauf} \cite[S.~3]{mobQes}):
-\begin{figure}[h]
-    \centering
-        \includegraphics[width=\textwidth]{Abbildungen/Ablauf_Handy-Signatur.png}
-    \caption{Schematischer Ablauf der Handy-Signatur}
-    \label{fig:HandySignaturablauf}
-\end{figure}
 \begin{enumerate}
     \item Benutzer greift auf eine Web-basierte Schnittstelle eines Service Providers zu.
     \item Service Provider schickt standardisierte Signaturanfrage an A-Trust.
@@ -252,6 +250,13 @@ Da es sich bei der \textit{Handy-Signatur} um eine serverseitige mobile Signatur
     \item Signaturerstellung wird von A-Trust durchgeführt und eine standardisiertes Ergebnis an den Service Provider gemeldet.
     \item Service Provider meldet das Ergebnis an den Benutzer über die Web-Schnittstelle.
 \end{enumerate}
+\begin{figure}[htbp]
+    \centering
+        \includegraphics[width=\textwidth]{Abbildungen/Ablauf_Handy-Signatur.png}
+    \caption{Schematischer Ablauf der Handy-Signatur}
+    \label{fig:HandySignaturablauf}
+\end{figure}
+
 Dabei ist zu beachten, dass dieser Vorgang nicht vom gleichen Endgerät ausgeführt werden soll, welches die SMS erhalten hat, da sonst keine \emph{qualifizierte} elektronische Signatur erstellt werden kann. Das Sicherheitskonzept der Anwendung basiert auf der Kombination von üblicher Passwortauthentifizierung und der \emph{Out-Of-Band Authentifizierung} als zweitem Faktor. Der Zugriff auf den \emph{privaten Schlüssel} zur Signaturerstellung muss also erstens durch ein Passwort und zweitens durch den separaten Kanal des Mobilfunknetzes, autorisiert werden. Die eigentliche Signaturerstellung wird von A-Trust in einem zentralem HSM\footnote{Hardware Sicherheits-Modul} vorgenommen, welches die kryptographischen Schlüssel des Benutzers sicher verwahrt.
 \subsubsection{Vorteile}
 Der Vorteil der Anwendung, gegenüber der Verwendung der Chipkarte (Bürgerkarte), ist die Verwendung des SMS-TAN als Authentifizierungsmethode, statt eines Kartenlesegerätes am Computer des Benutzers. Somit soll eine maximale Verfügbarkeit der Anwendung sichergestellt werden, da die SMS-TAN von beliebigen Mobiltelefonen mit SIM-Karte empfangen werden kann. Außerdem bietet die \emph{Out-Of-Band Authentifizierung} einen zusätzlichen Schutz, falls der Computer des Benutzers kompromittiert sein sollte. Außerdem kann die Signaturerstellung in einer kontrollierten Umgebung stattfinden und somit auch einfacher und effizienter abgesichert werden.
