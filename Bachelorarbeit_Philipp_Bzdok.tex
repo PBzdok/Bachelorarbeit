@@ -413,8 +413,7 @@ Das Mobiltelefon und insbesondere das Smartphone als Weiterentwicklung sind aus 
 
 Ebenfalls problematisch ist die Aufhebung der separaten Kanäle durch Smartphones. Da es möglich ist den Web-Service des Service-Providers auch über das Smartphone aufzurufen besteht keine Trennung mehr zwischen der Passwortauthentifizierung über das Internet und dem Empfang der \textit{SMS-TAN} durch das Smartphone. Beide Komponenten der Zwei-Faktor Authentifizierung werden somit durch das selbe Endgerät verarbeitet. Infolge dessen muss nur ein Gerät, beispielsweise durch Keylogger, kompromittiert sein um das Sicherheitskonzept der Authentifikation zu durchbrechen. Es handelt sich grundsätzlich auch nicht um eine ``reine'' Out-Of-Band Authentifizierung, da die \textit{SMS-TAN} nur über den separaten Kanal des Mobilfunknetzes empfangen wird jedoch ebenfalls über eine Web-Schnittstelle an den Service-Provider gesendet wird.
 
-Diese Eigenschaften in Verbindung mit der Möglichkeit die SMS an andere Geräte wie den Computer weiterzuleiten eröffnen eine Vielzahl von Angriffsvektoren\todo{Tabelle mit Angriffsvektoren} auf die Zwei-Faktor Authentifizierung mit Passwort und \textit{SMS-TAN}. Das Mobiltelefon sollte für den Gebrauch von \textit{SMS-TAN} idealerweise kein Smartphone sein damit die Risikofaktoren der schädlichen Apps und der Zugriff auf die Web-Schnittstelle unterbunden werden. Falls doch ein Smartphone zur Authentifikation genutzt wird muss der Benutzer sich im klaren über die Vertrauenswürdigkeit der installierten Apps sein und die \textit{SMS-TAN} nicht über das selbe Gerät eingeben über das er die SMS empfangen hat.\todo{Letztes Kapitel eventuell auslagern} 
-
+Diese Eigenschaften in Verbindung mit der Möglichkeit die SMS an andere Geräte wie den Computer weiterzuleiten eröffnen eine Vielzahl von Angriffsvektoren auf die Zwei-Faktor Authentifizierung mit Passwort und \textit{SMS-TAN}. Das Mobiltelefon sollte für den Gebrauch von \textit{SMS-TAN} idealerweise kein Smartphone sein damit die Risikofaktoren der schädlichen Apps und der Zugriff auf die Web-Schnittstelle unterbunden werden. Falls doch ein Smartphone zur Authentifikation genutzt wird muss der Benutzer sich im klaren über die Vertrauenswürdigkeit der installierten Apps sein und die \textit{SMS-TAN} nicht über das selbe Gerät eingeben über das er die SMS empfangen hat.
 \section{Mobilfunknetzwerk}
 Heutzutage besteht das Mobilfunknetz aus einer Kombination von drei verschiedenen Technologien, welche aufeinander aufbauen:
 \begin{enumerate}
@@ -435,7 +434,23 @@ Ebenfalls ist ein Angriff auf den Benutzer auf der Ebene des Mobilfunknetzbetrei
 \section{Zusammenfassung}
 Die \textit{SMS-TAN} als Authentifizierungsmethode ist durch ihre Zugänglichkeit für den Benutzer und das erhöhte Sicherheitsniveau gegenüber der einfachen Passwortauthentifizierung eine beliebte Wahl der Zwei-Faktor Authentifizierung. So findet diese Authentifizierungsmethode viel Verwendung in Anwendungen, welche eine \emph{starke Authentifikation} erfordern. Beispiele für diese Anwendungsbereich sind Online-Banking, Online-Shopping und die österreichische \textit{Handy-Signatur}. Die der SMS zugrunde liegende Technologien und die Tatsache, dass es sich beim Mobiltelefon um einen Alltagsgegenstand handelt, stellt die absolute Sicherheit dieser Authentifizierungsmethode jedoch in Frage. Ebenfalls stellen die umfangreichen Anwendungsmöglichkeiten der Smartphones ein Sicherheitsrisiko für die Authentifizierung via \textit{SMS-TAN} dar. Smartphones sind anfällig für Schadsoftware und bieten dazu die Möglichkeit die Authentifizierung auf einem einzigen Endgerät durchzuführen, was wiederum die Separation der Kanäle gänzlich unterbindet. Ebenfalls zeigen sich Defizite in den Konzepten der Authentifizierung mit Besitz durch die \textit{SMS-TAN} und der Mobilfunknetze heraus. So sind bereits Angriffe durchgeführt worden, welche den Faktor des Besitzes umgangen haben oder es technisch ermöglichen die Nachrichten abzufangen und mitzulesen.
 
-Zusammengefasst bietet die SMS \emph{keine} optimale Umgebung für eine Authentifikation per Einmal-Passwort, da das Engerät welches die SMS empfängt leicht kompromittiert werden kann und der Übertragungsweg nicht hinreichend abgesichert ist. Aus diesem Grund möchte ich im folgenden Kapitel alternative Authentifizierungsmethoden und ihre Kombinationen darstellen.
+Ingesamt bietet die SMS \emph{keine} optimale Umgebung für eine Authentifikation per Einmal-Passwort, da das Engerät welches die SMS empfängt leicht kompromittiert werden kann und der Übertragungsweg nicht hinreichend abgesichert ist, wie in Tabelle \ref{table:AngriffsvektorenSMSTAN} zusammengefasst. Aus diesem Grund möchte ich im folgenden Kapitel alternative Authentifizierungsmethoden und ihre Kombinationen evaluieren.
+\begin{table}[htbp]
+    \begin{tabularx}{\textwidth}{ llX }
+        \toprule
+        Komponente & Angriffsvektor & Beschreibung  \\
+        \midrule
+        Mobiltelefonnummer & SIM Hijacking & Angreifer registriert die Telefonnummer auf eine neue SIM \\
+        Mobiltelefonnummer & Weiterleitung & Durch das Weiterleiten der SMS können diverse weitere Sicherheitslücken ausgenutzt werden \\
+        Mobiltelefon & Unbefugter Zugriff & Mobiltelefon als Alltagsgegenstand evtl. nicht ausreichend vor Zugriff gesichert \\
+        Smartphone & Schadsoftware & Malware auf dem Smartphone kann Zugriff auf SMS Nachrichten haben und diese weiterleiten; Verstärkt durch die Benutzung des Smartphones als einziges Gerät \\
+        Mobilfunknetz & GSM & Verschlüsselung der Nachricht nicht garantiert sicher \\
+        Mobilfunknetz & SS7 & Abfangen von Nachrichten durch Schwachstellen im Protokoll in Verbindung mit der schwachen GSM Verschlüsselung \\
+        Mobilfunknetz & Betreiber & Sicherheitsmaßnamen der Betreiber-internen Datenverarbeitung unbekannt \\
+    \end{tabularx}
+    \caption{Liste der Angriffsvektoren auf die \textit{SMS-TAN}}
+    \label{table:AngriffsvektorenSMSTAN}
+\end{table}
 
 \chapter{Alternative Multi-Faktor Authentifizierung}
 
