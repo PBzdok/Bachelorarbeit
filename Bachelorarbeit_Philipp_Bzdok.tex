@@ -453,7 +453,12 @@ Ingesamt bietet die SMS \emph{keine} optimale Umgebung für eine Authentifikatio
 \end{table}
 
 \chapter{Alternative Multi-Faktor Authentifizierung}
+Sicherheitskritische Anwendung wie die \textit{Handy-Signatur} erfordern eine \emph{starke} Authentifizierung. Typischerweise wird eine solche Authentifizierung durch eine Zwei- oder Multi-Faktor Authentifizierung implementiert. Eine Kombination der in Kapitel \ref{sec:Authentifizierung} vorgestellten Authentifizierungsmethoden erhöht das Sicherheitsniveau einer Anwendung erheblich. In den meisten Fällen wird von Service-Providern eine Kombination von üblicher Passwortauthentifizierung und \textit{SMS-TAN} benutzt \cite{fido17}. Die \textit{SMS-TAN} ist wie im letzten Kapitel erläutert jedoch keine optimale Wahl für besonders gefährdete Anwendungsbereiche wie Online-Banking oder die \textit{Handy-Signatur}.
 
+Im folgenden möchte ich alternative Authentifizierungsmethoden evaluieren, welche die \textit{SMS-TAN} und ihre Schwächen ersetzen sollen. Tabelle \ref{table:Sicherheit} bietet eine Übersicht aller gängigen Authentifizierungsmethoden aus welcher die Methoden \textit{Time-based One-Time Passwörter}, \textit{Universal Second Factor} und \textit{Biometrie} anhand ihrer Eignung ausgewählt wurden.
+\section{Time-based One-Time Passwörter (TOTP)}
+\section{Universal Second Factor (U2F)}
+\section{Biometrie}
 
 \chapter{Zusammenfassung}
 
