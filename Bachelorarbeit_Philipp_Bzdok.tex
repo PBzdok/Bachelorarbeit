@@ -457,6 +457,8 @@ Sicherheitskritische Anwendung wie die \textit{Handy-Signatur} erfordern eine \e
 
 Im Folgenden möchte ich alternative Authentifizierungsmethoden evaluieren, welche die \textit{SMS-TAN} und ihre Schwächen ersetzen sollen. Als grundlegender ersten Faktor der Authentifizierung wird das Passwort beibehalten, da dieses sich etabliert hat und den Faktor des Wissens am besten repräsentiert. Aus diesem Grund werden Faktoren aus der Kategorie \emph{Wissen} nicht weiter betrachtet.
 
+Die Implementierung der alternativen Authentifizierungsmethoden erfolgt \emph{prototypisch} auf der Basis einer \textit{Ruby on Rails} Webanwendung in der Programmiersprache \textit{Ruby}. Weitergehende Informationen zu den benutzten Verfahren und Bibliotheken finden sich in den entsprechenden Kapiteln.
+
 \section{Eignung der Verfahren}
 Die alternativen Authentifizierungsmethoden müssen sich für den Anwendungsbereich der mobilen serverseitigen Signatur eignen. Die \textit{Handy-Signatur} ist ein Dienst, welcher von einer breiten Masse der Bevölkerung benutzt werden soll und eine \emph{starke Authentifikation} erfordert. Somit sind die Aspekte Benutzerfreundlichkeit, Komplexität und Sicherheit von besonderer Bedeutung. In Kapitel \ref{sec:AuthentifizierungVergleich} wurden die Eigenschaften der verschiedenen Authentifizierungsmethoden bereits in diesen Kategorien verglichen.
 \begin{description}
