@@ -466,7 +466,52 @@ Die alternativen Authentifizierungsmethoden müssen sich für den Anwendungsbere
 \end{description}
 Tabelle \ref{table:Sicherheit} bietet eine Übersicht aller gängigen Authentifizierungsmethoden aus welcher die Methoden \textit{Time-based One-Time Passwörter}, \textit{Universal Second Factor} und \textit{Biometrie} anhand ihrer Eignung ausgewählt wurden.
 
-\section{Time-based One-Time Passwörter (TOTP)}
+\section{Time-based One-Time Password (TOTP)}
+Das Time-based One-Time Password (Zeit-basiertes Einmal-Passwort), im Folgenden nur noch \textit{TOTP} gennant, ist eine Software-basierte Authentifizierungsmethode durch Besitztum. \textit{TOTP} basiert auf einem \textit{HMAC}\footnote{Hash-based message authentication code}-Einmal-Passwort Algorithmus (HOTP) und erzeugt zeitlich eingeschränkte Einmal-Passwörter. Ein Auszug aus dem RFC 6238 unterstreicht die Eignung des Verfahrens als Zwei-Faktor Authentifizierung für Transaktions-orientierte Webanwendungen:
+\begin{quote}
+    ``The proposed algorithm can be used across a wide range of network
+    applications, from remote Virtual Private Network (VPN) access and
+    Wi-Fi network logon to transaction-oriented Web applications.  The
+    authors believe that a common and shared algorithm will facilitate
+    adoption of two-factor authentication on the Internet by enabling
+    interoperability across commercial and open-source implementations.'' \cite{rfc6238}
+\end{quote}
+Im Rahmen der \textit{Initiative For Open Authentication (OAUTH)} wurde das \textit{TOTP} entwickelt und soll einen branchenübergreifenden Standard definieren. Eine weit verbreitete Implementierung dieser Authentifizierungsmethode ist der \textit{Google Authenticator}.
+\subsection{Funktionsweise}
+Das \textit{TOTP} erweitert den \textit{HMAC}-Einmal-Passwort Algorithmus, jedoch benutzt \textit{TOTP} die UNIX-Zeit\footnote{Gangzahliger Wert seit 01.01.1970} als variablen Faktor der Passwortgenerierung, statt einem Zähler. Für den Algorithmus werden folgende Werte benötigt:
+\begin{itemize}
+    \item $K$ : Geheimnis, welches zwischen Client und Server vereinbart wird
+    \item $X$ : Zeitschritt in Sekunden (Standardwert $X = 30$)
+    \item $T_0$ : UNIX-Zeit als Startwert der Zählung der Zeitschritte (UNIX-Epoche $T_0 = 0$)
+    \item $T_a$ : Aktuelle UNIX-Zeit
+\end{itemize}
+Der Integer $T$ berechnet sich aus $T = (T_a - T_0) / X$ und gibt die Anzahl der Zeitschritte seit $T_0$ und der aktuellen Zeit an. Somit ist das \textit{TOTP} definiert als $TOTP = HOTP(K, T)$. Der \textit{HOTP} Algorithmus ist in RFC 4226\footnote{https://tools.ietf.org/html/rfc4226} definiert und kann in drei Grundschritte zusammengefasst werden:
+\begin{enumerate}
+    \item Generiere einen HMAC-SHA-1 Wert mit einem Zähler $C$: 
+    \[
+        HS = \textrm{HMAC-SHA-1}(K, C)
+    \]
+    \item Generiere einen 4-Byte langen String (Dynamic Truncation $DT$): 
+    \[
+        S_{bits} = DT(HS)
+    \]
+    \item Berechnen den \textit{HOTP}-Wert mit $S_{num}$ als Konvertierung von $S_{bits}$ in eine Ziffer und Digit = Anzahl der Ziffern des generierten Passworts:
+    \[
+        D = S_{num} \bmod 10^{\textrm{Digit}}
+    \]
+\end{enumerate}
+\subsection{Eigenschaften}
+Das \textit{TOTP} ist ein Software-basiertes Verfahren und benötigt deshalb eine Ausführungsumgebung. Für den Benutzer heißt das, dass er eine Client-Software installieren muss. Ein populäres Softwareprodukt wird von Google angeboten. Der \textit{Google Authenticator} ist eine Anwendung für Smartphones mit Android, iOS oder Blackberry Betriebssystem. Die Service-Provider hingegen müssen eine API implementieren, welche zum \textit{Google Authenticator} kompatibel ist. Ein Beispiel dafür ist die Bibiliothek \textit{ROTP}\footnote{https://github.com/mdp/rotp} in der Programmiersprache \textit{Ruby}. Die Gegenseitige Kompatibilität wird durch RFC 4226 (HOTP) und RFC 6236 (TOTP) sichergestellt.
+
+Diese Authentifizierungsmethode eignet sich gut als Subsitution der \textit{SMS-TAN}, da ebenfalls ein Smartphone vom Benutzer genutzt werden kann. Jedoch werden nur Smartphones mit Android, iOS und Blackberry Betriebssystem unterstützt, infolge dessen können alte Mobiltelefone für diese Methode nicht verwendet werden\footnote{Im Falle von \textit{Google Authenticator}}. Im Gegensatz zur \textit{SMS-TAN} ist keine Übertragung des Einmal-Passworts zum Endgerät notwendig, lediglich bei der Registrierung der Authentifizierungsmethode muss zwischen Client und Server ein Geheimnis im Client hinterlegt werden welches zur Passworterzeugung  genutzt wird. Diese Eigenschaft umgeht die Schwächen der \textit{SMS-TAN} im Bezug auf den Übertragungskanal gänzlich. Ebenfalls ist kein Zugriff auf das Passwort durch andere Applikationen möglich, sodass sich insgesammt ein höheres Sicherheitsniveau ergibt. Das \textit{TOTP} eignet sich außerdem besser als Authentifizierung durch Besitz, da der physische Zugriff auf das Gerät, welches den Client ausführt, gegeben sein muss. Eine weitere Vorteil ist die Dauer der Gültigkeit der erzeugten Passwörter, denn diese sind in der Regel nur 30 Sekunden gültig und machen somit einen Angriff schwieriger. Für den Benutzer ergibt sich dadurch jedoch kein Nachteil, da er einfach das Passwort des darauf folgenden Intervalls nutzen kann.
+
+\subsection{Sicherheit}
+Die Sicherheit dieses Verfahrens hängt im Wesentlichen von der Speicherung des Geheimnisses ab, da dieses zur Erzeugnung von gültigen Passwörtern genutzt werden kann. Somit müssen die Schlüssel (Geheimnisse) sicher und verschlüsselt gespeichert werden. Ebenfalls muss die initiale Übertragung des Geheimnisses unbedingt über einen sicheren und verschlüsselten Kanal wie SSL geschehen, da sonst nicht gewährleisten werden kann dass nur der Benutzer das Geheimnis kennt. Das erfolgsversprechendste Angriffsszenarion ist ein Brute-Force Angriff, da das Passwort meist nur aus 6 Ziffern besteht. Dieses lässt sich jedoch einfach unterbinden, indem die Eingabe auf eine geringe Anzahl an Versuchen beschränkt wird. Insgesammt ist die Sicherheit im direkten Vergleich zur \textit{SMS-TAN} höher, da die Passwörter nicht über den unsicheren Kanal des Mobilfunknetzwerks übertragen werden müssen und andere Anwendungen keinen Zugriff auf die Passwörter haben.
+
+\subsection{Schwächen}
+Wie bei allen Methoden der Kategorie Authentifizierung durch Besitz ist dieses Authentifizierungsmethode anfällig gegen Diebstahl. Beim Smartphone handelt es sich um ein Alltagsgegenstand der nicht zuverlässig gesichtert aufbewahrt wird. Es ist also in der Verantwortung des Benutzers das Smartphone ausreichend gegen unbefugten Zugriff, z.\,B. durch einen PIN, zu sichern. Ebenfalls stellen \textit{Man-In-The-Middle}-Angriffe ein Risiko für die Authentifizierungsmethode dar. In so einem Angriffsszenario leitet der Angreifer den Benutzer auf eine gefälschte Seite und entlockt ihm so die Passwörter.
+
+\subsection{Implementierung}
 \section{Universal Second Factor (U2F)}
 \section{Biometrie}
 
