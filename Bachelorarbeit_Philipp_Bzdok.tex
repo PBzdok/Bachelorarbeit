@@ -478,7 +478,7 @@ Die alternativen Authentifizierungsmethoden müssen sich für den Anwendungsbere
 \end{description}
 Tabelle \ref{table:Sicherheit} bietet eine Übersicht aller gängigen Authentifizierungsmethoden aus welcher die Methoden \textit{Time-based One-Time Passwörter}, \textit{Universal Second Factor} und \textit{Biometrie} anhand ihrer Eignung ausgewählt wurden.
 
-\section{Time-based One-Time Password (TOTP)}
+\section{Time-based One-Time Password (TOTP)}\label{sec:TOTP}
 Das Time-based One-Time Password (Zeit-basiertes Einmal-Passwort), im Folgenden nur noch \textit{TOTP} gennant, ist eine Software-basierte Authentifizierungsmethode durch Besitztum. \textit{TOTP} basiert auf einem \textit{HMAC}\footnote{Hash-based message authentication code}-Einmal-Passwort Algorithmus (HOTP) und erzeugt zeitlich eingeschränkte Einmal-Passwörter. Ein Auszug aus dem RFC 6238 unterstreicht die Eignung des Verfahrens als Zwei-Faktor Authentifizierung für Transaktions-orientierte Webanwendungen:
 \begin{quote}
     ``The proposed algorithm can be used across a wide range of network
@@ -524,6 +524,141 @@ Die Sicherheit dieses Verfahrens hängt im Wesentlichen von der Speicherung des 
 Wie bei allen Methoden der Kategorie Authentifizierung durch Besitz ist dieses Authentifizierungsmethode anfällig gegen Diebstahl. Beim Smartphone handelt es sich um ein Alltagsgegenstand der nicht zuverlässig gesichtert aufbewahrt wird. Es ist also in der Verantwortung des Benutzers das Smartphone ausreichend gegen unbefugten Zugriff, z.\,B. durch einen PIN, zu sichern. Ebenfalls stellen \textit{Man-In-The-Middle}-Angriffe ein Risiko für die Authentifizierungsmethode dar. In so einem Angriffsszenario leitet der Angreifer den Benutzer auf eine gefälschte Seite und entlockt ihm so die Passwörter.
 
 \subsection{Implementierung}
+Dieses Kapitel dient zur Veranschaulichung einer simplen, jedoch effektiven Implementierung einer Multi Faktor Authentifizierung mit Zeitbasierten Einmal-Passwörtern. Als Grundlage dafür habe ich eine eine Webanwendung mit dem Framework \textit{Ruby on Rails}\footnote{https://rubyonrails.org/} gebaut und darauf aufbauend eine \textit{TOTP}-Authentifizierung, wie in Kapitel \ref{sec:TOTP} beschrieben, implementiert. Die Webanwendung soll es einem registrierten Benutzer ermöglichen Nachrichten zu erstellen und diese anschließend zu signieren. In der Webanwendung ist es einem Benutzer möglich sich mit Name, E-Mail und Passwort zu registrieren, wie in Abbildung \ref{fig:Authwebapp_login} gezeigt. Um sich jedoch erstmals in der Webanwendung anmelden zu können muss der Benutzer den Zugriff auf die angegebene E-Mail Adresse bestätigen indem er auf einen Link in einer initialen E-Mail klickt, welche er von der Webanwendung zugeschickt bekommt. Anschließend hat der Benutzer Zugriff auf sein Konto. Um jedoch Zugriff auf die Signaturerstellung zu haben, muss der Benutzer jedoch zusätzlich den zweiten Faktor der Authentifizierung in den Kontoeinstellungen aktivieren, in diesem Fall das \textit{TOTP}. Um ein \textit{TOTP} zu aktivieren muss der Benutzer ein Haken in der entsprechenden Checkbox setzen und anschließend den ihm präsentierten QR-Code in einer Software seiner Wahl (hier mit \textit{Google Authenticator} getestet) auf einem zweiten Gerät scannen (siehe Abbildung \ref{fig:Authwebapp_qr}). Anschließend muss der Benutzer ein Einmal-Passwort, welches ihm z.\,B. vom \textit{Google Authenticator} generiert wird eingeben. Falls das Passwort nicht stimmt oder der Benutzer den Vorgang abricht wird keine \textit{TOTP} Authentifizerung aktiviert. Im Falle einer erfolgreichen Verifizierung durch den Server mithilfen eines asynchronen Aufrufes wird die Checkbox im aktivierten Zustand gelassen und der Benutzer kann durch eine finale Bestätigung die Authentifizierungsmethode aktivieren.
+\begin{figure}[htbp]
+    \centering
+        \includegraphics[width=\textwidth]{Abbildungen/Authwebapp_login}
+    \caption{Anmeldeseite der Webanwendung}
+    \label{fig:Authwebapp_login}
+\end{figure}
+\clearpage
+\begin{figure}[htbp]
+    \centering
+        \includegraphics[width=\textwidth]{Abbildungen/Authwebapp_qr}
+    \caption{QR-Code zur Aktivierung der TOTP Authentifizierung}
+    \label{fig:Authwebapp_qr}
+\end{figure}
+
+Da \textit{Ruby on Rails} eine \textit{Model-View-Controller} Architektur folgt stelle ich im Folgenden die relevanten Details der Implementierung in ihren Komponenten dar:
+\subsubsection{Model}
+Das \textit{Model} bezieht sich auf die Entitäten der Webanwendung und beschreibt diese. Anhand der im \textit{Model} definierten Eigenschaften wird eine Datenbanktabelle erstellt. Im Falle des Benutzers sind dabei die Spalten aus Tabelle \ref{table:db-user} erstellt worden\footnote{Hierbei ist zu beachten, dass das \texttt{otp\_secret} nicht verschlüsselt gespeichert wird, da dies den Rahmen des Protoypen sprengen würde}.
+\begin{table}[htbp]
+    \begin{tabularx}{\textwidth}{ lX }
+        \toprule
+        Spalte & Beschreibung \\ 
+        \midrule
+        \texttt{name} & Name des Benutzers \\
+        \texttt{email} & E-Mail des Benutzers \\
+        \texttt{created\_at} & Erstellungsdatum des Benutzerkontos \\
+        \texttt{updated\_at} & Aktualisierungsdatum des Benutzerkontos \\
+        \texttt{password\_digest} & Hashwert des bei der Anmeldung angegebenen Passworts \\
+        \texttt{actvation\_digest} & Hashwert eines E-Mail-Verifizierungs Tokens \\
+        \texttt{activated\_at} & Zeitpunkt der Kontoaktivierung \\
+        \texttt{totp\_activated} & Boolscher Wert ob TOTP Authentifizierung aktiviert ist \\
+        \texttt{otp\_secret} & Wert anhand dessen eine TOTP Authentifizerung registriert und ausgeführt werden kann \\
+        \bottomrule
+    \end{tabularx}
+    \caption{Datenbanktabelle: Benutzer}
+    \label{table:db-user}
+\end{table}
+
+Das \textit{User Model} wird programmatisch definiert und erlaubt somit Validitätsprüfungen der Werte, bevor ein Benutzer in der Datenbank gespeichert wird. So werden z.\,B. E-Mail Adressen einer Prüfung durch einen regulären Ausdruck unterzogen oder die Existenz des Namens geprüft. Ebenfalls lassen sich Beziehungen zu anderen \textit{Model}-Klassen definieren, so hat in dieser Implementierung das \textit{User Model} eine 1-n Beziehung zum \textit{Message Model}. Diese Eigenschaften des \textit{Models} sind zu sehen in Listing \ref{lst:User.rb-dsl}. Typisch an dieser Stelle für \textit{Ruby on Rails} ist die \textit{Domain Specific Language} (DSL), welche durch Metaprogrammierung in Ruby ermöglicht wird. Ebenfalls werden Funktionen im \textit{Model} implementiert, welche auf einer Instanz des Objektes zur Laufzeit agieren und somit die Anwendungslogik definieren. Ein Beispiel für solch eine Funktion, welche essenziel für die Anwendung ist, ist die Generierung eines \textit{TOTP}-Objektes und des dazugehörigen QR-Codes (siehe Listing \ref{lst:User.rb-createTOTP}). Dazu wurden die Ruby Bibiliotheken\footnote{Auch \textit{Gems} gennant} \textit{rotp - Ruby on time Password} und \textit{rqrcode - Ruby QR Code} verwendet. Die Grundlage für eine Erstellung eines TOTP ist das Geheimnis welches zwischen Server und Client ausgehandelt wird. Die Erstellung eines solchen Wertes wird ebenfalls im \textit{Model} definiert, da jeder Benutzer einen eigenen Wert bekommt: \ruby{self.otp_secret = ROTP::Base32.random_base32} . Das \texttt{otp\_secret} wird bereits bei der Erstellung des Benutzerkontos generiert und gespeichert um eine unmittelbare Verifizierung eines \textit{TOTP} zu ermöglichen. Direkt nach der Erstellung des Kontos kann mit Hilfe des \texttt{otp\_secret} eine \textit{TOTP}-Instanzvariable generiert werden und anschließend der QR-Code im Frontend weiterverarbeitet werden. Die Verifizerung kann nun bei Bedarf auf der Objektinstanz des Benutzers aufgerufen werden.
+\begin{listing}[htpb]
+    \begin{minted}{ruby}
+        class User < ApplicationRecord
+            has_many :messages, dependent: :destroy
+            has_secure_password
+        
+            attr_accessor :remember_token, :activation_token, :reset_token, :totp
+        
+            before_create :create_activation_digest, :create_otp_secret
+            before_save   :downcase_email
+        
+            validates :name, presence: true,
+                            length: { maximum: 50 }
+        
+            VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+            validates :email, presence: true,
+                            length: { maximum: 255 },
+                            format: { with: VALID_EMAIL_REGEX },
+                            uniqueness: { case_sensitive: false }
+        
+            validates :password, presence: true,
+                                length: { minimum: 6 },
+                                allow_nil: true
+            # [...]
+        end
+    \end{minted}
+    \caption{\texttt{User.rb} - Definition der Eigenschaften in \textit{DSL}}
+    \label{lst:User.rb-dsl}
+\end{listing}
+
+\begin{listing}[htpb]
+    \begin{minted}{ruby}
+        # [...]
+        # Creates and assigns the totp object and returns the qr code
+        def create_totp
+          self.totp = ROTP::TOTP.new(otp_secret)
+          RQRCode::QRCode.new(totp.provisioning_uri('AuthWebApp'), size: 8, level: :h)
+        end
+        # [...]
+    \end{minted}
+    \caption{\texttt{User.rb} - Funktion zur Generierung eines TOTP-Objektes}
+    \label{lst:User.rb-createTOTP}
+\end{listing}
+\clearpage
+\subsubsection{Controller und Routen}
+Für den Zugriff auf das Model und dessen Funktionen sind die \textit{Controller} zuständig. Die \textit{Controller} steuern den Zugriff auf die \textit{Models} und die dazugehörigen \textit{Views}. Für die \textit{TOTP}-Verifikation wird anhand der URL eine Route bestimmt und vom \textit{Controller} verarbeitet. Listing \ref{lst:routes.rb} zeigt die definierten Routen. Die dort definierten Ressourcen sind meistens \textit{Models} und in der Datenbank hinterlegt, können aber auch temporäre Daten sein. Des weiteren lassen sich die ausführbaren Operation erweitern (z.\,B. \ruby{get :verify_otp, on: :member}) oder einschränken (z.\,B. \ruby{resources :messages, only: [:create, :destroy]}).
+
+Die Kernfunktionalität der \textit{TOTP}-Authentifizierung, die Verifizierung, ist als Erweiterung der User Ressource von mir implementiert worden und bietet im Gegensatz zu den restlichen Operationen für User keine \textit{View} an. Der Aufruf der Schnittstelle wird über \texttt{GET /users/:id/verify\_otp} getätigt und erwartet die Parameter \texttt{UserID} und \texttt{totp}. Aufrufe an diese Operationen prüfen immer ob der angegebene Benutzer existiert, ob die aktuelle Session aktiv ist und ob der Benutzer angemeldet ist. Die letzteren beiden Punkte werden anhand des Session-Cookies geprüft. Listing \ref{lst:user-controller-verify-otp.rb} zeigt die Methode welche beim Aufruf auf \texttt{GET /users/:id/verify\_otp} aktiviert wird. Der Rückgabewert der Methode ist in jedem Fall ein JSON Objekt welches die Verifizierungsfunktion des \textit{User Models} wiederspiegelt.
+\begin{listing}[htpb]
+    \begin{minted}{ruby}
+        Rails.application.routes.draw do
+            root 'static_pages#home'
+            get '/home', to: 'static_pages#home'
+            get '/contact', to: 'static_pages#contact'
+            get '/about', to: 'static_pages#about'
+            get '/signup', to: 'users#new'
+            post '/signup', to: 'users#create'
+            get '/login', to: 'sessions#new'
+            post '/login', to: 'sessions#create'
+            delete '/logout', to: 'sessions#destroy'
+            resources :users do
+                get :verify_otp, on: :member
+            end
+            resources :messages, only: [:create, :destroy]
+            resources :account_activations, only: [:edit]
+            resources :password_resets, only: [:new, :create, :edit, :update]
+        end
+    \end{minted}
+    \caption{\texttt{routes.rb} - Definition der Routen in der Webanwendung}
+    \label{lst:routes.rb}
+\end{listing}
+
+\begin{listing}[htpb]
+    \begin{minted}{ruby}
+        # [...]
+        # GET /users/:id/verify_otp
+        def verify_otp
+          respond_to do |format|
+            format.html { redirect_to @user }
+            format.json do
+              if @user.verify_totp(user_params[:totp])
+                render json: { 'totp_valid' => true }
+              else
+                render json: { 'totp_valid' => false }
+              end
+            end
+          end
+        end
+        # [...]
+    \end{minted}
+    \caption{\texttt{user\_controller.rb} - TOTP-Verifizierungs Operation}
+    \label{lst:user-controller-verify-otp.rb}
+\end{listing}
+\subsubsection{View}
+Die \textit{Views} sind die Repräsentationen der Ressourcen und können statisch sein (z.\,B. Zeilen 2-10 in Listing \ref{lst:routes.rb}) oder mithilfe von Templates und den Ressourcen dynamisch generiert werden (Zeilen 11-16 in Listing \ref{lst:routes.rb}). Die Form der \textit{View} richtet sich dabei nach der Anforderung im Request, so ist es möglich eine Ressource z.\,B. als HTML oder JSON Repräsentation anzufordern. Um die Komplexität des Prototypen gering zu halten habe ich mich jeweils auf eine Repräsentation beschränkt. Die \textit{TOTP}-Verifizierung stellt hier eine Besonderheit dar, da keine HTML Repräsentation notwendig ist.
+
 \section{Universal Second Factor (U2F)}
 \section{Biometrie}
 
