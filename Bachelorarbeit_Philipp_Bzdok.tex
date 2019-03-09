@@ -67,9 +67,9 @@ Hier möchte ich auf die Umstände der Abschlussarbeit eingehen und denen danken
 % ----------------------------------------------------------------
 
 \chapter{Einleitung}
-Digitale Signaturen nehmen in der heutigen Zeit eine wichtige Rolle in der Informationstechnik und somit im Alltag ein. Mit Hilfe von digitalen Signaturen ist es möglich beliebigen Daten zweifelsfrei Integrität und Authentizität nachzuweisen. Die Eigenschaften der Integrität und Authentizität sind besonders wichtig im juristischen Kontext der elektronischen Signatur, in welchem sie das Gegenstück zur handschriftlichen Unterschrift bildet. Der Begriff \emph{elektronische Signatur} wird oft synonym zur \emph{digitalen Signatur} verwendet, jedoch ist die elektronische Signatur ein juristischer Begriff, welcher erstmals in einem überarbeiteten Entwurf der EU-Richtlinie 1999/93/EG von der EU-Kommission verwendet wurde \cite{eSigEU99}. Der Begriff digitale Signatur hingegen stammt aus der Mathematik beziehungsweise aus der Kryptographie und bezeichnet einerseits ein asymmetrisches Kryptographieverfahren, aber anderseits den mathematischen Wert, welcher durch das Kryptographieverfahren erzeugt wird.
+Digitale Signaturen nehmen in der heutigen Zeit eine wichtige Rolle in der Informationstechnik und somit im Alltag ein. Mit Hilfe von digitalen Signaturen ist es möglich beliebigen digitalen Daten zweifelsfrei Integrität, Authentizität und nicht-Abstreitbarkeit nachzuweisen. Die Eigenschaften der Integrität, Authentizität und nicht-Abstreitbarkeit sind besonders wichtig im juristischen Kontext der elektronischen Signatur, in welchem sie das Gegenstück zur handschriftlichen Unterschrift bildet. Der Begriff \emph{elektronische Signatur} wird oft synonym zur \emph{digitalen Signatur} verwendet, jedoch ist die elektronische Signatur ein juristischer Begriff, welcher erstmals in einem überarbeiteten Entwurf der EU-Richtlinie 1999/93/EG von der EU-Kommission verwendet wurde \cite{eSigEU99}. Der Begriff digitale Signatur hingegen stammt aus der Mathematik beziehungsweise aus der Kryptographie und bezeichnet einerseits ein asymmetrisches Kryptographieverfahren, und anderseits den mathematischen Wert, welcher durch das Kryptographieverfahren erzeugt wird.
 
-Digitale Signaturen werden bereits in einem breiten Spektrum von Anwendungen eingesetzt, wie zum Beispiel für Verschlüsselung von E-Mail oder Zertifikatsbasierten Systemen. Des weiteren werden digitale Signaturen immer häufiger in neuen Anwendungsbereichen eingesetzt. Eine besondere Anwendung auf die ich im Laufe dieser Ausarbeitung explizit eingehen möchte, ist die österreichische \textit{Handy-Signatur}. Die \textit{Handy-Signatur} ermöglicht es den Bürgern Österreichs sich ohne zusätzliche Hardware wie Kartenlesegeräte online per Handy auszuweisen oder Formulare und Dokumente elektronisch zu unterschreiben \cite{handySigOnline}. Die Besonderheit dieser digitalen Signatur ist, dass die \textit{Handy-Signatur} eine qualifizierte elektronische Signatur auslöst und somit juristisch einer handgeschriebenen Unterschrift gleichgesetzt werden kann. Deshalb erfordert eine solche elektronische Signatur eine \emph{starke} Benutzer-Authentifizierung, welche in der Praxis durch eine Kombination von Passwort und \textit{SMS-TAN} oder andere Authentifizierungsmethoden implementiert wird. Die \textit{SMS-TAN} wurde jedoch bereits von NIST\footnote{National Institute of Standards and Technology} in ihrer Tauglichkeit eingeschränkt, da SMS nie dafür gemacht worden ist Geheimnisse zu übertragen \cite{mobileSec,NIST800-63B}. Trotz der mangelhaften Eignung von SMS als Kanal für Out-Of-Band Authentifizierung\footnote{Authentifizierung über separaten Kanal}, ist das SMS-OTP\footnote{One time password} die am meisten verbreitete Variante der Multi-Faktor Authentifizierung \cite[Abb. 3]{fido17}.
+Digitale Signaturen werden bereits in einem breiten Spektrum von Anwendungen eingesetzt, wie zum Beispiel für Schutz von E-Mail oder Zertifikatsbasierten Systemen. Des weiteren werden digitale Signaturen immer häufiger in neuen Anwendungsbereichen eingesetzt. Eine besondere Anwendung auf die ich im Laufe dieser Ausarbeitung explizit eingehen möchte, ist die österreichische \textit{Handy-Signatur}. Die \textit{Handy-Signatur} ermöglicht es den Bürgern Österreichs sich ohne zusätzliche Hardware wie Kartenlesegeräte online per Handy auszuweisen oder Formulare und Dokumente elektronisch zu unterschreiben \cite{handySigOnline}. Die Besonderheit dieser digitalen Signatur ist, dass die \textit{Handy-Signatur} eine qualifizierte elektronische Signatur auslöst und somit juristisch einer handgeschriebenen Unterschrift gleichgesetzt werden kann. Deshalb erfordert eine solche elektronische Signatur eine \emph{starke} Benutzer-Authentifizierung, welche in der Praxis durch eine Kombination von Passwort und \textit{SMS-TAN} oder andere Authentifizierungsmethoden implementiert wird. Die \textit{SMS-TAN} wurde jedoch bereits von NIST\footnote{National Institute of Standards and Technology} in ihrer Tauglichkeit eingeschränkt, da SMS nie dafür gemacht worden ist Geheimnisse zu übertragen \cite{mobileSec,NIST800-63B}. Trotz der mangelhaften Eignung von SMS als Kanal für Out-Of-Band Authentifizierung\footnote{Authentifizierung über separaten Kanal}, ist das SMS-OTP\footnote{One time password} die am meisten verbreitete Variante der Multi-Faktor Authentifizierung \cite[Abb. 3]{fido17}.
 
 Aus diesem Grund möchte ich in dieser Arbeit die Eigenschaften der Authentifizierungsmethode der \textit{Handy-Signatur} beleuchten und darauf basierend Alternativen evaluieren und prototypisch implementieren. Mein Ziel ist es, die modernen Möglichkeiten von Multi-Faktor Authentifizierung im Kontext der elektronischen Signatur zu vergleichen und zu bewerten, um abschließend eine Aussage über die Tauglichkeit für den Anwendungsbereich \textit{Fernsignatur} machen zu können.
 
@@ -81,7 +81,8 @@ Die digitale (Fern-)Signatur besteht aus vielen komplexen Verfahren, wie Hashfun
 \chapter{Grundlagen}
 Um die Eignung von Authentifizierungsmethoden bestimmen zu können, müssen erst einmal die Rahmenbedingung festgelegt werden. Die digitale Signatur und die \textit{Handy-Signatur} werden im Folgenden beleuchtet, da dies der Anwendungsbereich ist, welchen die Authentifizierungsmethoden schützen sollen. Dazu stelle ich verschiedenste Signaturvarianten und deren Komponenten im Detail dar. Nach der Bestimmung dieser Eigenschaften wird die Authentifizierung im Kontext der Signatur erläutert.
 
-\section{Hash-Funktionen}\label{sec:Hash-Funktionen}
+\section{Kryptographische Verfahren}
+\subsection{Hash-Funktionen}\label{sec:Hash-Funktionen}
 \textit{Hash-Funktionen} spielen eine zentrale Rolle in der Welt der Kryptographie und \textit{digitalen Signaturen}. Allgemein bilden diese Funktionen eine Nachricht beliebiger (Bit-)Länge auf einen Hash-Wert festen Länge ab. Der Hash-Wert ist abhängig von der gesamten Nachricht und sollte möglichst schnell berechnet werden können. Dietmar Wätjen beschreibt die Kollisionsfreiheit als eine besondere Eigenschaft von \textit{Hash-Funktionen} \cite[S. 89]{krypt08}: 
 \begin{quote}
     ``Es sei $M$ eine Nachricht. Eine Hashfunktion $h$ ist \emph{schwach kollisionsfrei für $M$} [...], wenn es berechnungsmäßig praktisch unmöglich ist, eine Nachricht $M' \neq M$ mit $h(M) = h(M')$ zu finden. [...]
@@ -109,7 +110,7 @@ Die \textit{Hash-Funktionen} sind so wichtig für die \textit{digitalen Signatur
 
 Eine Signatur soll die Eigenschaften Integrität und Authentizität der zu signierenden Daten sicherstellen. Damit die Authentizität gewährleistet werden kann, muss erst die Integrität der Nachricht sicher gestellt werden. An dieser Stelle greifen die Eigenschaften der \textit{Hash-Funktion}. Dadurch, dass nur der Hash-Wert signiert wird, kann der Empfänger der Signatur durch eine eigene Hash-Wert Berechnung der Nachricht nachvollziehen, dass die Nachricht nicht verändert worden ist\footnote{Durch die Änderung der Nachricht würde auch die Signatur ungültig werden}. Außerdem bietet die Signatur des Hash-Wertes mit fixer Länge Laufzeitvorteile in einigen Signaturverfahren.
 
-\section{Digitale Signaturen}
+\subsection{Digitale Signaturen}
 Als \textit{digitale Signatur} bezeichnet man im allgemeinen ein asymmetrisches Kryptosystem\footnote{Oberbegriff für Public-Key-Verschlüsselungsverfahren}. Bei asymmetrischen Kryptographiesystemen besitzt jeder Teilnehmer ein Schlüsselpaar, bestehend aus einem \emph{öffentlichen Schlüssel} und einem \emph{privaten Schüssel}. Der \emph{private Schlüssel} wird für die Signaturerstellung verwendet, wobei der \emph{öffentliche Schlüssel} von einer beliebigen anderen Person abgerufen werden kann, um die Signatur zu verifizieren (siehe Abb. \ref{fig:Signaturablauf}). Da ausschließlich der Teilnehmer selbst Zugang zu seinem eigenen \emph{privaten Schlüssel} hat, eignet sich ein solches System hervorragend zur Sicherstellung von Authentizität von Daten und somit für die \textit{digitalen Signatur}. Authentizität ist eine der fünf wichtigen Eigenschaften einer Signatur \cite{sch05}:
 \begin{enumerate}
     \item Sie ist \textbf{authentisch}. Das bedeutet, dass der Unterzeichner die Signatur willentlich ausgeführt hat.
@@ -118,7 +119,6 @@ Als \textit{digitale Signatur} bezeichnet man im allgemeinen ein asymmetrisches 
     \item Die signierte Nachricht ist \textbf{unveränderbar}. Das bedeutet, dass die Nachricht nach der Signatur nicht modifiziert werden kann.
     \item Die Signatur ist \textbf{bindend}. Das bedeutet, das der Unterzeichner diese zu einem späteren Zeitpunkt nicht annullieren oder bestreiten kann. Diese Eigenschaft ist das Ergebnis der Summe der Eigenschaften 1-4 und ist besonders im juristischen Kontext der elektronischen Signatur relevant.
 \end{enumerate}
-\clearpage
 \begin{figure}[h]
     \centering
         \includegraphics[width=\textwidth]{Abbildungen/Ablauf_Signatur.png}
@@ -134,85 +134,81 @@ Es gibt Grundsätzlich zwei Arten eine Nachricht $M$ digital zu signieren, wobei
 In der Praxis findet größtenteils nur die Signatur mit Hash-Wert Anhang Verwendung, da sonst die Signatur linear mit der Größe der Nachricht wächst und eine längere Nachricht eine größere Angriffsfläche bietet. Welche Signaturalgorithmen $f_{d_s}(h(M))$ in der Praxis verwendet werden, wird hauptsächlich über den fortlaufend aktualisierten ``Digital Signature Standard (DSS)'' des National Institute of Standards and Technology in den USA vorgegeben. Dieses Dokument stellt Empfehlungen dar, welche Signaturalgorithmen als sicher angesehen werden können und wie diese zu verwenden sind. Auf europäischer Ebene veröffentlicht die SOG-IS Crypto Working Group das sogenannte ``SOG-IS Crypto Evaluation Scheme Agreed Cryptographic Mechanisms'' \cite{sogisACM}. Insbesondere die Verfahren \textit{RSA} und \textit{DSA} haben sich durchgesetzt und werden häufig eingesetzt, jedoch besteht eine Tendenz zu den Signaturverfahren auf Basis von elliptischen Kurven da diese Vorteile in der Sicherheit, der Schlüssellängen und der Laufzeit gegenüber \textit{RSA} und \textit{DSA} aufweisen \cite[S. 59]{komSec13}
 
 Auf Grundlage der Empfehlung der SOG-IS möchte ich zur Übersicht die gängigen Signaturverfahren aufzählen:
-\subsection{RSA}
+\subsubsection{RSA}
 Der \textbf{R}iverst-\textbf{S}hamir-\textbf{A}dleman Algorithmus ist ein Public-Key Kryptosystem und findet oft Anwendung in Bereichen der Verschlüsselungsverfahren. Jedoch kann dieser Algorithmus auch zur Signatur von Nachrichten eingesetzt werden. 
 \begin{quote}
     ``Die Sicherheit von RSA basiert auf der Schwierigkeit, große Zahlen in ihre Primfaktoren zu zerlegen.'' \cite[S. 82]{ertel12}
 \end{quote}
-\subsubsection{Schlüsselerzeugung}
-Zwei stochastisch unabhängige Primzahlen $p$ und $q$ werden generiert, wobei $p \neq q$. Die beiden Primzahlen sollten so groß gewählt werde, dass das RSA-Modul $n=p \cdot q$ die gewünschte Stellenlänge hat. Das Schlüsselpaar besteht aus $e$ (encrypt) und $d$ (decrypt) und wird mit Hilfe der Eulerschen Funktion ermittelt:
-\[
-    \Phi(n = p \cdot q) = (p-1) \cdot (q-1)
-\]
-Einer der beiden Schlüssel wird zufallsmäßig gewählt, sodass er kleiner ist als $\Phi(n)$ und teilerfremd zu $\Phi(n)$ ist. Der andere Schlüssel ergibt sich aus der Bedingung für RSA, dass die beiden Schlüssel $e$ und $d$ eines Paares multiplikativ invers in der Arithmetik modulo $\Phi(n)$ sind:
-\[
-    e \cdot d \equiv 1 (\bmod \Phi(n)) 
-\]
-Der \emph{private Schlüssel} $d$ ist geheim und muss durch spezielle Maßnahmen geschützt werden, da er für die Signatur benutzt wird. Der \emph{öffentliche Schlüssel} $e$ und der Modulo $n$ werden veröffentlicht und dienen zur Verifikation der Signatur. Die Primzahlen $p$ und $q$ müssen ebenfalls sicher verwahrt werden. Sie können aber auch vernichtet werden um Missbrauch vorzubeugen.
-\subsubsection{Signaturerzeugung}
-Voraussetzung für die Signaturerzeugung, ist die Formatierung\footnote{RSA-Padding} des Hash-Wertes auf die Länge des Moduls $n$. Die Signatur $s$ für die Nachricht $M$ kann nun berechnet werden durch:
-\[
-    s = (M^d) \bmod n    
-\]
-\subsubsection{Signaturverifikation}
-Die Signatur kann wiederrum unter Kenntnis des \emph{öffentlichen Schlüssels} bestehend aus $(e, n)$ verifiziert werden:
-\[
-    (s^e) \bmod n = (M^d)^e \bmod n = M'
-\]
-Falls die wiederhergestellte Nachricht $M'$ mit der übertragenen Nachricht $M$ übereinstimmt, so kann die Signatur als gültig angesehen werden.
-\subsubsection{Anmerkungen}
-Bei RSA handelt es sich um ein deterministisches Verfahren. In der Praxis wird statt der unmittelbaren Nachricht der Hash-Wert dieser Nachricht signiert. In diesem Fall muss $m$ mit $h(m)$ ersetzt werden. Besonders die Erzeugung der Zufallszahlen und der \emph{private Schlüssel} sind von besonderer Wichtigkeit und müssen durch spezielle Verfahren geschützt werden, auf die ich in Kapitel \ref{sec:Authentifizierung} noch detailliert eingehen werde.
-
-\subsection{Digital Signature Algorithm (DSA)}
+\begin{description}[font=\rmfamily]
+    \item[Schlüsselerzeugung:] Zwei stochastisch unabhängige Primzahlen $p$ und $q$ werden generiert, wobei $p \neq q$. Die beiden Primzahlen sollten so groß gewählt werde, dass das RSA-Modul $n=p \cdot q$ die gewünschte Stellenlänge hat. Das Schlüsselpaar besteht aus $e$ (encrypt) und $d$ (decrypt) und wird mit Hilfe der Eulerschen Funktion ermittelt:
+    \[
+        \Phi(n = p \cdot q) = (p-1) \cdot (q-1)
+    \]
+    Einer der beiden Schlüssel wird zufallsmäßig gewählt, sodass er kleiner ist als $\Phi(n)$ und teilerfremd zu $\Phi(n)$ ist. Der andere Schlüssel ergibt sich aus der Bedingung für RSA, dass die beiden Schlüssel $e$ und $d$ eines Paares multiplikativ invers in der Arithmetik modulo $\Phi(n)$ sind:
+    \[
+        e \cdot d \equiv 1 (\bmod \Phi(n)) 
+    \]
+    Der \emph{private Schlüssel} $d$ ist geheim und muss durch spezielle Maßnahmen geschützt werden, da er für die Signatur benutzt wird. Der \emph{öffentliche Schlüssel} $e$ und der Modulo $n$ werden veröffentlicht und dienen zur Verifikation der Signatur. Die Primzahlen $p$ und $q$ müssen ebenfalls sicher verwahrt werden. Sie können aber auch vernichtet werden um Missbrauch vorzubeugen.
+    \item[Signaturerzeugung:] Voraussetzung für die Signaturerzeugung, ist die Formatierung\footnote{RSA-Padding} des Hash-Wertes auf die Länge des Moduls $n$. Die Signatur $s$ für die Nachricht $M$ kann nun berechnet werden durch:
+    \[
+        s = (M^d) \bmod n    
+    \]
+    \item[Signaturverifikation:] Die Signatur kann wiederrum unter Kenntnis des \emph{öffentlichen Schlüssels} bestehend aus $(e, n)$ verifiziert werden:
+    \[
+        (s^e) \bmod n = (M^d)^e \bmod n = M'
+    \]
+    Falls die wiederhergestellte Nachricht $M'$ mit der übertragenen Nachricht $M$ übereinstimmt, so kann die Signatur als gültig angesehen werden.
+    \item[Anmerkungen:] Bei RSA handelt es sich um ein deterministisches Verfahren. In der Praxis wird statt der unmittelbaren Nachricht der Hash-Wert dieser Nachricht signiert. In diesem Fall muss $m$ mit $h(m)$ ersetzt werden. Besonders die Erzeugung der Zufallszahlen und der \emph{private Schlüssel} sind von besonderer Wichtigkeit und müssen durch spezielle Verfahren geschützt werden, auf die ich in Kapitel \ref{sec:Authentifizierung} noch detailliert eingehen werde.
+\end{description}
+\subsubsection{Digital Signature Algorithm (DSA)}
 Dieses Signaturverfahren wurde erstmals 1991 vom National Institute of Standards and Technology vorgeschlagen und letztendlich auch im Jahr 1994 als Standard im Digital Signature Standard (DSS) offiziell aufgenommen.
 \begin{quote}
     ``Die Sicherheit dieses Verfahrens beruht auf der [..] Schwierigkeit des Diskreten Logarithmenproblems $\mathbb{F}^*_p$.'' \cite[S. 45]{bsi-tr-02102-1}
 \end{quote}
 Im Gegensatz zu RSA eignet sich dieses Verfahren nicht zur kryptographischen Verschlüsselung von Nachrichten, sondern ist speziell für den Anwendungsbereich der \textit{digitalen Signaturen} eingeführt worden. Ein weiterer Unterschied zu RSA ist die Notwendigkeit einer kryptographischen Hash-Funktion zur Signaturerzeugung.
-\subsubsection{Schlüsselerzeugung}
-Wähle zwei Zahlen, welche durch den Standard definiert sind und die Sicherheit des Verfahrens vorgeben:
-\[
-    (L, N) \in \{(1024, 160), (2028, 224), (2048, 256), (3072, 256)\}
-\]
-Anschließend werden die Primzahlen $p$ und $q$ mit folgenden Eigenschaften erzeugt:
-\[
-    2^{N-1} < q < 2^N \quad\textrm{,}\quad 2^{L-1} < p < 2^L \quad\textrm{und}\quad q|(p-1)
-\]
-Zusätzlich wird eine Zahl $\alpha \in \mathbb{F}^*_p$ gewählt und $g$ berechnet:
-\[
-    g := \alpha^{(p-1)/q} \bmod p
-\]
-Falls $g = 1$ wiederhole die Berechnung von $g$ mit einem anderen $\alpha \in \mathbb{F}^*_p$. Der letzte Schritt der Schlüsselerzeugung besteht aus der Wahl einer Zahl $x \in \{1, \ldots, q - 1 \}$ und $y := g^x \bmod p$. Der \emph{öffentliche Schlüssel} setzt sich zusammen aus $(p, q, g, y)$ und der \emph{private Schlüssel} aus $x$.
+\begin{description}
+    \item[Schlüsselerzeugung:] Wähle zwei Zahlen, welche durch den Standard definiert sind und die Sicherheit des Verfahrens vorgeben:
+    \[
+        (L, N) \in \{(1024, 160), (2028, 224), (2048, 256), (3072, 256)\}
+    \]
+    Anschließend werden die Primzahlen $p$ und $q$ mit folgenden Eigenschaften erzeugt:
+    \[
+        2^{N-1} < q < 2^N \quad\textrm{,}\quad 2^{L-1} < p < 2^L \quad\textrm{und}\quad q|(p-1)
+    \]
+    Zusätzlich wird eine Zahl $\alpha \in \mathbb{F}^*_p$ gewählt und $g$ berechnet:
+    \[
+        g := \alpha^{(p-1)/q} \bmod p
+    \]
+    Falls $g = 1$ wiederhole die Berechnung von $g$ mit einem anderen $\alpha \in \mathbb{F}^*_p$. Der letzte Schritt der Schlüsselerzeugung besteht aus der Wahl einer Zahl $x \in \{1, \ldots, q - 1 \}$ und $y := g^x \bmod p$. Der \emph{öffentliche Schlüssel} setzt sich zusammen aus $(p, q, g, y)$ und der \emph{private Schlüssel} aus $x$.
+    
+    Wie auch bei RSA, wird der \emph{private Schlüssel} zur Signaturerzeugung genutzt und muss geschützt werden. Der \emph{öffentliche Schlüssel} dient wiederum auch der Verifikation der Signatur.
+    \item[Signaturerzeugung:] Die Erzeugung der Signatur benötigt eine Hash-Funktion. Dabei sollte eine empfohlene Funktion aus der Tabelle \ref{table:Hashfunktionen} verwendet werden. Der aus der Funktion resultierende Hash-Wert sollte der Bit-Länge von $q$ entsprechen. Ebenso sollte die Länge von $p$ mindestens 2000 betragen\footnote{Bis 2022 als sicher eingestuft.\cite{bsi-tr-02102-1}}.
 
-Wie auch bei RSA, wird der \emph{private Schlüssel} zur Signaturerzeugung genutzt und muss geschützt werden. Der \emph{öffentliche Schlüssel} dient wiederum auch der Verifikation der Signatur.
-\subsubsection{Signaturerzeugung}
-Die Erzeugung der Signatur benötigt eine Hash-Funktion. Dabei sollte eine empfohlene Funktion aus der Tabelle \ref{table:Hashfunktionen} verwendet werden. Der aus der Funktion resultierende Hash-Wert sollte der Bit-Länge von $q$ entsprechen. Ebenso sollte die Länge von $p$ mindestens 2000 betragen\footnote{Bis 2022 als sicher eingestuft.\cite{bsi-tr-02102-1}}.
-
-Zur Berechnung wird noch eine Zufallszahl $k \in \{ 1, \ldots, q - 1 \}$ aus einem kryptographisch sicheren Zufallszahlengenerator benötigt. Diese Zahl wird pro Signatur erzeugt und muss, wie der \emph{private Schlüssel}, sicher verwaltet werden. Die Signatur einer Nachricht $M$ welche durch das DSA Verfahren generiert wird, besteht aus dem Zahlenpaar $r$ und $s$:
-\[
-    r = (g^k \bmod p)
-\]
-Zur Berechnung von $s$ muss außerdem eine Zahl $z$ bestimmt werden aus den linkesten $N$ Bits des Hash-Wertes $h(M)$:
-\[
-    s = (z + xr)k^{-1} \bmod q
-\]
-Die Signatur, bestehend aus $(s, r)$ kann nun zusammen mit der Nachricht $M$ verifiziert werden.
-\subsubsection{Signaturverifikation}
-Um die Signatur, bestehend aus $(s, r)$, auf der Nachricht $M$ zu prüfen, bedarf es des \emph{öffentlichen Schlüssels} $(p, q, g, y)$ des Unterzeichners. Im ersten Schritt wird überprüft ob: 
-\[
-    0 < r < q \quad\textrm{und}\quad 0 < s < q
-\]
-Falls einer dieser beiden Bedingungen nicht erfüllt werden, ist die Signatur als ungültig anzusehen. Damit die Signatur als gültig angesehen werden kann, muss $v$ berechnet werden durch:
-\begin{align*}
-    v& = (((g)^{u1}(y)^{u2}) \bmod p) \bmod q \quad\textrm{, mit}\\
-    w& = (s)^{-1} \bmod q \\
-    z& = \textrm{linkeste N Bits von $h(M)$} \\
-    u1& = (zw) \bmod q \\
-    u2& = (rw) \bmod q
-\end{align*}
-Falls $v = r$, ist die Signatur gültig.
-\subsubsection{Anmerkungen}
-Im Gegensatz zur RSA-Signaturvariante handelt es sich hierbei um einen probabilistischen Algorithmus, da die zufällige Wahl des \emph{privaten Schlüssels} mit $x \in \{1, \ldots, q - 1 \}$ essenziell ist. Wichtige schützenswerte Merkmale dieses Verfahrens sind der \emph{öffentliche Schlüssel} $x$ und die Zufallszahl $k$ aus der Signaturerzeugung. Neben der hier dargestellten Variante des DSA Signaturalgorithmus über einen Galoiskörper, gibt es außerdem noch die Variante unter der Verwendung von Elliptischen Kurven (ECDSA).
+    Zur Berechnung wird noch eine Zufallszahl $k \in \{ 1, \ldots, q - 1 \}$ aus einem kryptographisch sicheren Zufallszahlengenerator benötigt. Diese Zahl wird pro Signatur erzeugt und muss, wie der \emph{private Schlüssel}, sicher verwaltet werden. Die Signatur einer Nachricht $M$ welche durch das DSA Verfahren generiert wird, besteht aus dem Zahlenpaar $r$ und $s$:
+    \[
+        r = (g^k \bmod p)
+    \]
+    Zur Berechnung von $s$ muss außerdem eine Zahl $z$ bestimmt werden aus den linkesten $N$ Bits des Hash-Wertes $h(M)$:
+    \[
+        s = (z + xr)k^{-1} \bmod q
+    \]
+    Die Signatur, bestehend aus $(s, r)$ kann nun zusammen mit der Nachricht $M$ verifiziert werden.
+    \item[Signaturverifikation:] Um die Signatur, bestehend aus $(s, r)$, auf der Nachricht $M$ zu prüfen, bedarf es des \emph{öffentlichen Schlüssels} $(p, q, g, y)$ des Unterzeichners. Im ersten Schritt wird überprüft ob: 
+    \[
+        0 < r < q \quad\textrm{und}\quad 0 < s < q
+    \]
+    Falls einer dieser beiden Bedingungen nicht erfüllt werden, ist die Signatur als ungültig anzusehen. Damit die Signatur als gültig angesehen werden kann, muss $v$ berechnet werden durch:
+    \begin{align*}
+        v& = (((g)^{u1}(y)^{u2}) \bmod p) \bmod q \quad\textrm{, mit}\\
+        w& = (s)^{-1} \bmod q \\
+        z& = \textrm{linkeste N Bits von $h(M)$} \\
+        u1& = (zw) \bmod q \\
+        u2& = (rw) \bmod q
+    \end{align*}
+    Falls $v = r$, ist die Signatur gültig.
+    \subsubsection{Anmerkungen}
+    Im Gegensatz zur RSA-Signaturvariante handelt es sich hierbei um einen probabilistischen Algorithmus, da die zufällige Wahl des \emph{privaten Schlüssels} mit $x \in \{1, \ldots, q - 1 \}$ essenziell ist. Wichtige schützenswerte Merkmale dieses Verfahrens sind der \emph{öffentliche Schlüssel} $x$ und die Zufallszahl $k$ aus der Signaturerzeugung. Neben der hier dargestellten Variante des DSA Signaturalgorithmus über einen Galoiskörper, gibt es außerdem noch die Variante unter der Verwendung von Elliptischen Kurven (ECDSA).
+\end{description}
 
 \section{Mobile Signaturen}\label{sec:MobileSignaturen}
 Durch den Entwurf der EU-Richtlinie 1999/93/EG wurde die gesetzliche Grundlage für rechtsverbindliche elektronische Signaturen geschaffen. Die Richtlinie sieht eine Gerüst von Anforderungen für die Technologien rund um die elektronische Signaturen vor, basierend auf einer Zertifizierungstelle\footnote{Auch Certificate Authority oder CA genannt.}, welche die \emph{öffentlichen Schlüssel} zertifiziert und so genannten ``sicheren Signaturerstellungseinheiten'' (SSEE), welche wiederum die \emph{privaten Schlüssel} des Benutzers sicher verwaltet. Die EU-Kommission unterscheidet dabei zwischen der elektronischen Signatur und der \emph{qualifizierten} elektronischen Signatur (QES). Eine QES muss folgende Anforderungen erfüllen \cite{eSigEU99}:
@@ -255,7 +251,7 @@ Die \textit{Handy-Signatur} hat nach ihrer Einführung im Jahr 2010 die bisher i
 \begin{figure}[htbp]
     \centering
         \includegraphics[width=\textwidth]{Abbildungen/Ablauf_Handy-Signatur.png}
-    \caption{Schematischer Ablauf der Handy-Signatur}
+    \caption{Schematischer Ablauf der Handy-Signatur \cite[S.~3]{mobQes}}
     \label{fig:HandySignaturablauf}
 \end{figure}
 
