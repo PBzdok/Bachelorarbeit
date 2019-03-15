@@ -489,9 +489,9 @@ Biometrische Verfahren sind in der Regel am benutzerfreundlichsten wie in Kapite
 \chapter{Experimentelle Evaluation}
 Sicherheitskritische Anwendung wie die \textit{Handy-Signatur} erfordern eine \emph{starke} Authentifizierung. Typischerweise wird eine solche Authentifizierung durch eine Zwei- oder Multi-Faktor Authentifizierung implementiert. Eine Kombination der in Kapitel \ref{sec:Authentifizierung} vorgestellten Authentifizierungsverfahren erhöht das Sicherheitsniveau einer Anwendung erheblich. In den meisten Fällen wird von Service-Providern eine Kombination von üblicher Passwortauthentifizierung und \textit{SMS-TAN} benutzt \cite{fido17}. Die \textit{SMS-TAN} ist wie in Kapitel \ref{sec:smstan-problematik} erläutert jedoch keine optimale Wahl für besonders gefährdete Anwendungsbereiche wie die \textit{Handy-Signatur}.
 
-Im Folgenden möchte ich alternative Authentifizierungsverfahren evaluieren, welche die \textit{SMS-TAN} und ihre Schwächen ersetzen sollen. Als grundlegender ersten Faktor der Authentifizierung wird das Passwort beibehalten, da dieses sich etabliert hat und den Faktor des Wissens am besten repräsentiert. Aus diesem Grund werden Faktoren aus der Kategorie \emph{Wissen} nicht weiter betrachtet.
+Im Folgenden möchte ich alternative Authentifizierungsverfahren evaluieren, welche die \textit{SMS-TAN} und ihre Schwächen ersetzen sollen. Als grundlegender ersten Faktor der Authentifizierung wird das Passwort beibehalten, da dieses sich etabliert hat und den Faktor des Wissens am besten repräsentiert. Aus diesem Grund werden Faktoren aus der Kategorie \emph{Wissen} hier nicht weiter betrachtet. Ziel dieser Evaluation ist es Erkenntnisse zu sammeln um die abschließende Eignung der Authentifizierungsverfahren für die Fernsignatur zu bestimmen. Zusammen mit den Erkenntnissen der vorhergegangenen Kapiteln lässt sich so eine fundierte Aussage über die Tauglichkeit in Sicherheit, Benutzerfreundlichkeit und Komplexität formulieren.
 
-Die Implementierung der alternativen Authentifizierungsverfahren erfolgt \emph{prototypisch} auf der Basis einer \textit{Ruby on Rails} Webanwendung in der Programmiersprache \textit{Ruby}. Weitergehende Informationen zu den benutzten Verfahren und Bibliotheken finden sich in den entsprechenden Kapiteln.
+Die Implementierung der alternativen Authentifizierungsverfahren erfolgt \emph{prototypisch} auf Basis einer \textit{Ruby on Rails} Webanwendung in der Programmiersprache \textit{Ruby}. Weitergehende Informationen zu den benutzten Verfahren und Bibliotheken finden sich in den entsprechenden Kapiteln.
 
 \section{Time-based One-Time Password (TOTP)}\label{sec:TOTP}
 Das Time-based One-Time Password (Zeit-basiertes Einmal-Passwort), im Folgenden nur noch \textit{TOTP} gennant, ist eine Software-basiertes Authentifizierungsverfahren durch Besitztum. \textit{TOTP} basiert auf einem \textit{HMAC}\footnote{Hash-based message authentication code}-Einmal-Passwort Algorithmus (HOTP) und erzeugt zeitlich eingeschränkte Einmal-Passwörter. Ein Auszug aus dem RFC 6238 unterstreicht die Eignung des Verfahrens als Zwei-Faktor Authentifizierung für Transaktions-orientierte Webanwendungen:
@@ -503,7 +503,7 @@ Das Time-based One-Time Password (Zeit-basiertes Einmal-Passwort), im Folgenden 
     adoption of two-factor authentication on the Internet by enabling
     interoperability across commercial and open-source implementations.'' \cite{rfc6238}
 \end{quote}
-Im Rahmen der \textit{Initiative For Open Authentication (OAUTH)} wurde das \textit{TOTP} entwickelt und soll einen branchenübergreifenden Standard definieren. Eine weit verbreitete Implementierung dieses Authentifizierungsverfahrens ist der \textit{Google Authenticator}.
+Im Rahmen der \textit{Initiative For Open Authentication (OAUTH)} wurde das \textit{TOTP} entwickelt und soll einen branchenübergreifenden Standard definieren. Eine weit verbreitete Implementierung dieses Authentifizierungsverfahrens, auf Seiten des Benutzers, ist der \textit{Google Authenticator}.
 \subsection{Funktionsweise}
 Das \textit{TOTP} erweitert den \textit{HMAC}-Einmal-Passwort Algorithmus, jedoch benutzt \textit{TOTP} die UNIX-Zeit\footnote{Gangzahliger Wert in Millisekunden seit 01.01.1970} als variablen Faktor der Passwortgenerierung, statt einem Zähler. Für den Algorithmus werden folgende Werte benötigt:
 \begin{itemize}
@@ -533,7 +533,7 @@ Das \textit{TOTP} ist ein Software-basiertes Verfahren und benötigt deshalb ein
 Dieses Authentifizierungsverfahren eignet sich gut als Subsitution der \textit{SMS-TAN}, da ebenfalls ein Smartphone vom Benutzer genutzt werden kann. Jedoch werden nur Smartphones mit Android, iOS und Blackberry Betriebssystem unterstützt, infolge dessen können alte Mobiltelefone für dieses Verfahren nicht verwendet werden\footnote{Im Falle von \textit{Google Authenticator}}. Im Gegensatz zur \textit{SMS-TAN} ist keine Übertragung des Einmal-Passworts zum Endgerät notwendig, lediglich bei der Registrierung des Authentifizierungsverfahrens muss zwischen Client und Server ein Geheimnis vereinbart werden welches zur Passworterzeugung genutzt wird. Diese Eigenschaft umgeht die Schwächen der \textit{SMS-TAN} im Bezug auf den Übertragungskanal gänzlich. Durch App-Sandboxing ist ebenfalls kein Zugriff auf das Passwort durch andere Applikationen möglich, sodass sich insgesammt ein höheres Sicherheitsniveau ergibt. Das \textit{TOTP} eignet sich außerdem besser als Authentifizierung durch Besitz, da der physische Zugriff auf das Gerät, welches den Client ausführt, gegeben sein muss. Ein weitere Vorteil ist die Dauer der Gültigkeit der erzeugten Passwörter, denn diese sind in der Regel nur 30 Sekunden gültig und machen somit einen Angriff schwieriger. Für den Benutzer ergibt sich dadurch jedoch kein Nachteil, da er einfach das Passwort des darauf folgenden Intervalls nutzen kann.
 
 \subsection{Sicherheit}
-Die Sicherheit dieses Verfahrens hängt im Wesentlichen von der Speicherung des Geheimnisses ab, da dieses zur Erzeugnung von gültigen Passwörtern genutzt werden kann. Somit müssen die Schlüssel (Geheimnisse) sicher und verschlüsselt gespeichert werden. Ebenfalls muss die initiale Übertragung des Geheimnisses unbedingt über einen sicheren und verschlüsselten Kanal wie SSL geschehen, da sonst nicht gewährleisten werden kann dass nur der Benutzer das Geheimnis kennt. Das erfolgsversprechendste Angriffsszenarion ist ein Brute-Force Angriff, da das Passwort meist nur aus 6 Ziffern besteht. Dieses lässt sich jedoch einfach unterbinden, indem die Eingabe auf eine geringe Anzahl an Versuchen beschränkt wird. Insgesammt ist die Sicherheit im direkten Vergleich zur \textit{SMS-TAN} höher, da die Passwörter nicht über den unsicheren Kanal des Mobilfunknetzwerks übertragen werden müssen und andere Anwendungen keinen Zugriff auf die Passwörter haben.
+Die Sicherheit dieses Verfahrens hängt im Wesentlichen von der Speicherung des Geheimnisses ab, da dieses zur Erzeugnung von gültigen Passwörtern genutzt werden kann. Somit müssen die Geheimnisse sicher und verschlüsselt gespeichert werden. Ebenfalls muss die initiale Übertragung des Geheimnisses unbedingt über einen sicheren und verschlüsselten Kanal wie SSL geschehen, da sonst nicht gewährleisten werden kann dass nur der Benutzer das Geheimnis kennt. Das erfolgsversprechendste Angriffsszenario ist ein Brute-Force Angriff, da das Passwort meist nur aus 6 Ziffern besteht. Dieses lässt sich jedoch einfach unterbinden, indem die Eingabe auf eine geringe Anzahl an Versuchen beschränkt wird. Insgesammt ist die Sicherheit im direkten Vergleich zur \textit{SMS-TAN} höher, da die Passwörter nicht über den unsicheren Kanal des Mobilfunknetzwerks übertragen werden müssen und andere Anwendungen keinen Zugriff auf die Passwörter haben.
 
 \subsection{Schwächen}
 Wie bei allen Verfahren der Kategorie Authentifizierung durch Besitz ist dieses Authentifizierungsverfahren anfällig gegen Diebstahl. Beim Smartphone handelt es sich um ein Alltagsgegenstand der nicht zuverlässig gesichtert aufbewahrt wird. Es ist also in der Verantwortung des Benutzers das Smartphone ausreichend gegen unbefugten Zugriff, z.\,B. durch einen PIN, zu sichern. Ebenfalls stellen \textit{Man-In-The-Middle}-Angriffe ein Risiko für das Authentifizierungsverfahren dar. In so einem Angriffsszenario leitet der Angreifer den Benutzer auf eine gefälschte Seite und entlockt ihm so die Passwörter.
@@ -634,8 +634,55 @@ Das \textit{User Model} wird programmatisch definiert und erlaubt somit Validit�
     \label{lst:User.rb-createTOTP}
 \end{listing}
 \clearpage
+Das \textit{Model} der zu signierenden Nachrichten fällt etwas simpler aus, da dieses keine Parameter für die Authentifizierung benötigt. Die wesentlichen Eigenschaften der Nachrichten beschränken sich auf die Beziehung zum Benutzer, den Inhalt und die Signatur. Tabelle \ref{table:db-message} veranschaulicht nochmal die Datenbanktabelle des \textit{Message Models}. Die Funktionen des \textit{Models} beschränken sich auf die Erstellung und Verifikation der Signatur und sind in Listing \ref{lst:Message.rb} aufgeführt. Die von den Funktionen erwarteten Parameter sind von der \textit{OpenSSL} Bibliothek\footnote{https://ruby-doc.org/stdlib-2.6.2/libdoc/openssl/rdoc/OpenSSL.html} von Ruby erzeugte Objekte welche ein RSA Schlüsselpaar mit Länge 2048 abbilden. Wichtig an dieser Stelle ist das Kodieren der von OpenSSL generierten Signatur in UTF-8, da die verwendete Datenbank SQLite 3 keine ASCII 8-Bit Kodierung unterstützt. Jedoch muss die ASCII 8-Bit Kodierung bei der Verifikation wiederhergestellt werden. Weitere Parametere benötigen den Funktionen nicht, da der Inhalt der Nachricht sowie die Signatur Teile der Message Instanz sind, welche aus der Datenbank gelesen werden.
+\begin{table}[htbp]
+    \begin{tabularx}{\textwidth}{ lX }
+        \toprule
+        Spalte & Beschreibung \\ 
+        \midrule
+        \texttt{content} & Inhalt der Nachricht \\
+        \texttt{user\_id} & ID des zugehörigen Benutzers \\
+        \texttt{created\_at} & Erstellungsdatum der Nachricht \\
+        \texttt{updated\_at} & Aktualisierungsdatum der Nachricht \\
+        \texttt{signature} & Signaturwert kodiert als UTF-8 String \\
+        \bottomrule
+    \end{tabularx}
+    \caption{Datenbanktabelle: Message}
+    \label{table:db-message}
+\end{table}
+\begin{listing}[htpb]
+    \begin{minted}{ruby}
+        class Message < ApplicationRecord
+            belongs_to :user
+            validates :user_id, presence: true
+            validates :content, presence: true
+
+            def sign_content(keypair)
+                signature_ascii_8bit = keypair.sign_pss("SHA256",
+                                                        content,
+                                                        salt_length: :max,
+                                                        mgf1_hash: "SHA256")
+                self.signature = Base64.encode64(signature_ascii_8bit).encode('utf-8')
+            end
+
+            def verify_signature(keypair)
+                decoded_signature = Base64.decode64(signature.encode('ascii-8bit'))
+                keypair.public_key.verify_pss("SHA256",
+                                            decoded_signature,
+                                            content,
+                                            salt_length: :auto,
+                                            mgf1_hash: "SHA256")
+            end
+        end
+    \end{minted}
+    \caption{\texttt{Message.rb} - Funktionen des Message Models}
+    \label{lst:Message.rb}
+\end{listing}
+\clearpage
 \subsubsection{Controller und Routen}
 Für den Zugriff auf das Model und dessen Funktionen sind die \textit{Controller} zuständig. Die \textit{Controller} steuern den Zugriff auf die \textit{Models} und die dazugehörigen \textit{Views}. Für die \textit{TOTP}-Verifikation wird anhand der URL eine Route bestimmt und vom \textit{Controller} verarbeitet. Listing \ref{lst:routes.rb} zeigt die definierten Routen. Die dort definierten Ressourcen sind meistens \textit{Models} und in der Datenbank hinterlegt, können jedoch auch temporäre Daten oder statische HTML Seiten sein. Des weiteren lassen sich die ausführbaren Operation, über die standard CRUD-Operationen\footnote{Create, Read, Update, Delete} hinaus, erweitern (z.\,B. \ruby{get '/signup', to: 'users#new'}) und / oder einschränken (z.\,B. \ruby{resources :messages, only: [:create, :destroy]}). Besonders wichtig für die Implementierung der \textit{TOTP} Authentifizierung ist die Erweiterung der User Ressource um die Funktionalität der Verifizierung. Dazu wird eine spezielle Route, basierend auf einem User definiert (siehe Listing \ref{lst:routes.rb}, Zeilen 11-13), welche die CRUD-Operationen um die Route \texttt{GET /users/:id/verify\_otp} ergänzt. Die Funktionalität dahinter wird im \textit{Controller} durch die Funktion \texttt{verify\_otp} definiert. Diese Funktion stellt die Kernfunktionalität der \textit{TOTP}-Authentifizierung, die Verifizierung dar. Im Gegensatz zu den restlichen Operationen für User bietet diese Operation keine \textit{View} an. Der Aufruf der Operation wird über \texttt{GET /users/:id/verify\_otp} getätigt und erwartet die Parameter \texttt{UserID} und \texttt{totp}. Aufrufe an diese URL prüfen immer ob der angegebene Benutzer existiert, ob die aktuelle Session aktiv ist und ob der Benutzer angemeldet ist um unauthorisierten Zugriff zu vermeiden. Listing \ref{lst:user-controller.rb-verify-otp} zeigt die Funktion welche beim Aufruf auf \texttt{GET /users/:id/verify\_otp} aufgerufen wird. Der Rückgabewert der Funktion bildet den Rückgabewert der Verifizierungsfunktion des \textit{User Models} (siehe Listing \ref{lst:user.rb-verify-otp}) auf ein JSON Objekt ab. Dieses JSON Objekt kann im Folgenden vom Frontend interpretiert werden. An dieser Stelle ist anzumerken, dass nur das \textit{TOTP} vom Browser zum Server übertragen werden muss und das Gerät welches das Passwort generiert keinerlei Verbindung braucht.
+
+Die Signaturerstellung wurde über den Aufruf der Operation \texttt{/messages/:id/edit} implementiert. Der Aufruf leitet den Benutzer weiter an eine View, welche es ihm ermöglicht den Nachrichteninhalt zu sehen und zu signieren. Dabei wird ein Benutzer welcher keine Multi-Faktor Authentifizierung aktiviert hat auf sein Profil umgeleitet mit dem Hinweiß, dass eine Signatur nur mit Multi-Faktor Authentifizierung möglich ist. Falls ein weiteres Authentifizierungsverfahren für den Benutzer aktiv ist, so kann er dieses Verfahren verwenden um die Nachricht zu signieren (siehe Abb. \ref{fig:Authwebapp_sign_TOTP}). War die Authentifizierung des Benutzers via TOTP erfolgreich, so wird ein asynchroner Aufruf an die PUT Operation auf \texttt{/message/:id} getätigt und die wird Nachricht mit dem privaten Schlüssel des Benutzers signiert und gespeichert. Um einen Angriff auf diese zweite konsekutive Operation zu unterbinden wird bei der TOTP Authentifizierung ein Authentifizierungstoken generiert und in der Response returniert. Die konsekutive PUT Operation prüft anschließend die Gültigkeit des Tokens bevor die Nachricht signiert wird, wie in Listing \ref{lst:messages_controller.rb-update} dargestellt.
 \begin{listing}[htpb]
     \begin{minted}{ruby}
         Rails.application.routes.draw do
@@ -651,7 +698,7 @@ Für den Zugriff auf das Model und dessen Funktionen sind die \textit{Controller
             resources :users do
                 get :verify_otp, on: :member
             end
-            resources :messages, only: [:create, :destroy]
+            resources :messages, only: [:create, :edit, :update, :destroy]
             resources :account_activations, only: [:edit]
             resources :password_resets, only: [:new, :create, :edit, :update]
         end
@@ -694,9 +741,48 @@ Für den Zugriff auf das Model und dessen Funktionen sind die \textit{Controller
     \caption{\texttt{User.rb} - TOTP-Verifizierungs Funktion}
     \label{lst:user.rb-verify-otp}
 \end{listing}
+
+\begin{listing}[htpb]
+    \begin{minted}{ruby}
+        # [...]
+        # PATCH/PUT /messages/:id
+        def update
+          if multi_factor_authenticated
+            pkey = OpenSSL::PKey::RSA.new(current_user.private_key)
+            @message.sign_content(pkey)
+            if @message.save
+              flash[:info] = "Signature successfully created!"
+            else
+              flash[:error] = "Signature not created!"
+            end
+            session.delete(:authentication_token)
+            redirect_to root_url
+          else
+            flash[:error] = "Multi factor authentication failed! Please check profile settings."
+            redirect_to 'edit'
+          end
+        end
+        # [...]
+        def multi_factor_authenticated
+            message_params[:authentication_token] == session[:authentication_token] && message_params[:authenticated]
+        end
+        # [...]
+    \end{minted}
+    \caption{\texttt{messages\_controller.rb} - TOTP-Authentifizierung bei Signatur}
+    \label{lst:messages_controller.rb-update}
+\end{listing}
+
+\begin{figure}[htbp]
+    \centering
+        \includegraphics[width=\textwidth]{Abbildungen/Authwebapp_Signatur_via_TOTP}
+    \caption{Signaturerstellung mit TOTP Authentifizierung}
+    \label{fig:Authwebapp_sign_TOTP}
+\end{figure}
 \clearpage
 \subsubsection{View}
 Die \textit{Views} sind Repräsentationen der Ressourcen und können statisch sein (z.\,B. Zeilen 2-10 in Listing \ref{lst:routes.rb}) oder mithilfe von Templates und den Ressourcen dynamisch generiert werden (Zeilen 11-16 in Listing \ref{lst:routes.rb}). Die Form der \textit{View} richtet sich dabei nach der Anforderung im Request, so ist es möglich eine Ressource z.\,B. als HTML oder JSON Repräsentation anzufordern. Um die Komplexität des Prototypen gering zu halten habe ich mich jeweils auf eine Repräsentation beschränkt. Die \textit{TOTP}-Verifizierung stellt hier eine Besonderheit dar, da keine HTML Repräsentation notwendig ist. Die wichtigste \textit{View} im Kontext der \textit{TOTP}-Authentifizerung ist das Fenster welches den QR-Code abbildet. Dieses Fenster stellt eine Erweiterung zur View der Ressource User mit der URL \texttt{GET /users/:id/edit} dar, welches in Listing \ref{lst:edit.html.erb} dargestellt wird. Hier ist deutlich zu sehen wie Ruby on Rails die Infusion von Ruby Code in den Templates ermöglicht um dynamischen Inhalt zu generieren. Zeile 31 des Listings \ref{lst:edit.html.erb} zeigt die Erweiterung der View, die im Falle der aktivierten Checkbox \texttt{f.check\_box :totp\_activated} den QR-Code anzeigt. Hierbei handelt es sich um ein \texttt{Modal} aus \textit{Bootstrap} und ist Listing \ref{lst:otp_modal.html.erb} beziehungsweise Abbildung \ref{fig:Authwebapp_qr} dargestellt. Ebenfalls wird eine Javascript Datei inkludiert, welche für den asynchronen \textit{AJAX} Aufruf an das Backend zuständig ist. Dieses Vorgehen wurde gewählt, damit eine erfolgreiche Initialisierung des TOTP erfolgen kann. Dazu muss der Benutzer den ihm präsentierten QR-Code mit dem \textit{Google Authenticator} scannen und anschließend das TOTP im Fenster eingeben. Nur wenn die Verifikation durch den Server erfolgreich war kann das Authentifizierungsverfahren persistent aktiviert werden. Listing \ref{lst:otp.js} stellt die Javascript Funktionalität im Detail dar und zeigt wie die Antwort des Controllers aus Listing \ref{lst:user-controller.rb-verify-otp} interpretiert und anschließend dem Benutzer präsentiert wird. Dazu wird die \texttt{success} Callback Funktion des \textit{AJAX} Aufrufes genutzt um bei einem erfolgreichen Request die Antwort der Verifikation zu verarbeiten.
+
+Weitere \textit{Views} der Anwendung dienen dazu dem Benutzer eine Interaktion zur ermöglichen und Daten anzuzeigen. So werden beispielsweise auf der Startseite die Nachrichten und die dazugehöhrigen Signaturen angezeigt.
 \begin{listing}[htpb]
     \begin{minted}{html}
         <% provide(:title, "Edit user") %>
