@@ -885,7 +885,17 @@ Weitere \textit{Views} der Anwendung dienen dazu dem Benutzer eine Interaktion z
     \label{lst:otp.js}
 \end{listing}
 \clearpage
+
 \section{Universal Second Factor (U2F)}
+Der \textit{Universal Second Factor}, im Folgenden nur noch \textit{U2F}, ist ein offenere Standard für allgemein anwendbare Zwei-Faktor Authentifizierung. \textit{U2F} wurde von der \textit{FIDO Alliance} im Jahre 2014 spezifiziert \cite{u2fv1}. Das Verfahren basiert auf einer Challange-Response Authentifizierung und legt besonderen Wert auf die Privatsphäre des Benutzers. Der Schutz der Privatsphäre wird durch die Generierung eines neuen Schlüsselpaars pro Anwendung realisiert, sodass ein Vergleich der öffentlichen Schlüssel von mehreren Anwendungen keinen Aufschluss über das registrierte Gerät oder dessen Benutzer preisgibt. Ein Benutzer kann also ein \textit{U2F} kompatibles Gerät anwendungsübergreifend zur Authentifizierung nutzen. Außerdem ermöglicht der \textit{U2F} Standard eine Betriebssystem und Browserübergreifende Authentifizierung im Internet durch eine Javascript API und native API's für Smartphone Betriebsysteme \cite{u2fSpec}. Die Anwendung welche \textit{U2F} implementiert kann den Benutzer jederzeit zur Authentifizierung auffordern. Üblicherweise wird ein erste Faktor in Form von Benutzername und Passwort realisiert und anschließend durch eine \textit{U2F} Authentifizierung als zweiter Faktor verstärkt. \textit{U2F} Gerät können sich in diversen Formen manifestieren, beispielsweise USB-Geräte, NFC-Geräte, Bluetooth-Geräte oder bestehende Kryptographiesysteme. Eine weit verbreitete Implementierung ist ein USB-Gerät entwickelt von \textit{Yubico}, der \textit{Yubikey}. Dabei handelt es sich um eine Hardwareimplementierung in Form eines USB-Sicherheitsschlüssels mit kryptographischen Funktionen. Dieses Gerät ist zusätzlich gegen Zugriff auf die sicherheitskritischen Komponenten (Secure Element) abgesichert. Der Standard setzt sich als Ziel eine sichere ``Out-of-the-Box'' Authentifizierung zu ermöglichen indem keine weiteren Treiber benötigt werden und das Gerät über Betriebsystem APIs direkt mit dem Browser kommunizieren kann \cite{u2fSpec}.
+
+Im Folgenden werde ich die \textit{U2F} Authentifizierung hauptsächlich am Beispiel des \textit{Yubikeys} erklären.
+\subsection{Funktionsweise}
+\subsection{Eigenschaften}
+\subsection{Sicherheit}
+\subsection{Schwächen}
+\subsection{Implementierung}
+
 \section{Biometrie}
 
 \chapter{Ergebnisse}
