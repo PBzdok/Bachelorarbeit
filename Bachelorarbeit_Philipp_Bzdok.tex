@@ -910,7 +910,7 @@ Die Sicherheit der \textit{U2F} Authentifizierung basiert auf einem Public-Key K
 \subsection{Schwächen}
 Schwächen weißt das \textit{U2F} Verfahren inbesondere bei unsachgemäßer Handhabung des Sicherheitsschlüssels oder falscher Implementierung auf. Es steht in der Verantwortung der Benutzers das \textit{U2F} Gerät sicher zu verwahren und vor unbefugtem Zugriff zu schützen da, am Beispiel des Yubikeys, meist nur eine einfache Interaktion mit dem Gerät reicht um eine Authentifizerung durchzuführen. Abhilfe dagegen schaffen Implementierungen wie \textit{Myris}\footnote{https://www.eyelock.com/index.php/access-control/myris}, welche zusätzliche biometrische Merkmale wie die Iris erfordern. Deshalb ist eine Authentifizierung mit \textit{U2F} immer in Verbindung mit einem weiteren Faktor zu empfehlen. Ein weiteres Risko ist der Verlust der Hardware, wodurch der Benutzer den Zugriff auf sein Benutzerkonto verliehrt falls er keine Backup-Authentifizierung eingerichtet oder eine zweites \textit{U2F} Gerät zuvor registriert hat. Neben den benutzerspezifischen Risikofaktoren existieren ebenfalls technische Anforderungen um eine sichere Authentifizierung zu ermöglichen. So ist die Verwendung von verschlüsselten Übertragungskanälen zwangsweise erforderlich. Die \textit{FIDO Alliance} weist in der \textit{Universal 2nd Factor (U2F) Overview} \cite{u2fSpec} darauf hin das eine Schwachstelle die Interaktion des Gerätes mit Malware ist, solange der Zugriff über Anwendungen geschieht welche im \textit{User Space} agieren. Das \textit{U2F} Gerät kann einen ``guten'' Client nicht von einem ``bösen'' unterscheiden, sodass es prinzipiell möglich ist eine Registrierung bei einem bösartigen Serviceprovider (\texttt{origin}) durchzuführen. Verhindert werden soll dies durch direkten Zugriff auf das Gerät durch das Betriebssystem, jedoch existieren solche APIs gegenwärtig noch nicht.
 \subsection{Implementierung}
-In diesem Kapitel möchte ich eine prototypische \textit{U2F} Authentifizierung auf Basis einen \textit{Ruby on Rails} Webanwendung darstellen. Die Webanwendung ermöglicht es dem Benutzer sich zu registrieren und mit Hilfe der Zwei-Faktor Authentifizierung eine Nachricht zu signieren. Die Implementierung basiert auf der Anwendung aus Kapitel \ref{sec:TOTP} und erweitert diese. Aus diesem Grund ergeben sich einige Parallelen in gemeinsamen Komponenten wie dem \textit{User} und \textit{Message Model}, der Aktivierung des Benutzerkontos über eine E-Mail und der Aktivierung der Multi-Faktor Authentifizierung. Die Aktivierung der \textit{U2F} Authentifizierung setzt das angeschlossene Gerät, die Benutzerinteraktion mit dem Gerät und einen erfolgreichen Registrierungsprozess im Backend voraus. Abbildung \ref{fig:Authwebapp_u2f_init} zeigt schematisch den \textit{U2F} Registrierungsprozess in der Webanwendung analog zu Abbildung \ref{fig:totp-init}. Die Authentifizierung mit \textit{U2F} erfolgt ebenfalls ähnlich wie mit TOTP, jedoch wird der Benutzer ausschließlich zur Interaktion mit dem Gerät aufgefordert und muss keine Eingabe tätigen (siehe Abb. \ref{fig:Authwebapp_u2f_auth}). Dieser halbautomatisierte Ablauf wird durch die \textit{U2F} Javascript API ermöglicht, welche bei einer erfolgreichen Authentifizerung automatisch die Signaturerstellung anstößt. Wie im Kapitel \ref{sec:TOTPImpl} werde ich die Implementierung innerhalb der Komponenten des MVC-Frameworks beschreiben um eine gute Gegenüberstellung zu ermöglichen. Für die Authentifizierung mit \textit{U2F} ist ein kompatibles Gerät notwendig. Das hierfür genutzte Gerät ist der \textit{Yubikey 5} von \textit{Yubico}.
+In diesem Kapitel möchte ich eine prototypische \textit{U2F} Authentifizierung auf Basis einen \textit{Ruby on Rails} Webanwendung darstellen. Die Webanwendung ermöglicht es dem Benutzer sich zu registrieren und mit Hilfe der Zwei-Faktor Authentifizierung eine Nachricht zu signieren. Die Implementierung basiert auf der Anwendung aus Kapitel \ref{sec:TOTP} und erweitert diese. Aus diesem Grund ergeben sich einige Parallelen in gemeinsamen Komponenten wie dem \textit{User} und \textit{Message Model}, der Aktivierung des Benutzerkontos über eine E-Mail und der Aktivierung der Multi-Faktor Authentifizierung. Die Aktivierung der \textit{U2F} Authentifizierung setzt das angeschlossene Gerät, die Benutzerinteraktion mit dem Gerät und einen erfolgreichen Registrierungsprozess im Backend voraus. Abbildung \ref{fig:Authwebapp_u2f_init} zeigt schematisch den \textit{U2F} Registrierungsprozess in der Webanwendung analog zu Abbildung \ref{fig:totp-init}. Die Authentifizierung mit \textit{U2F} erfolgt ebenfalls ähnlich wie mit TOTP, jedoch wird der Benutzer ausschließlich zur Interaktion mit dem Gerät aufgefordert und muss keine Eingabe tätigen (siehe Abb. \ref{fig:Authwebapp_u2f_auth}). Die Aufforderung an den Benutzer wird ihm visuell im Browser mitgeteilt, wobei der aktive \textit{Yubikey} anfängt zu leuchten um seine Bereitschaft zu signalisieren. Dieser halbautomatisierte Ablauf wird durch die \textit{U2F} Javascript API ermöglicht, welche bei einer erfolgreichen Authentifizerung automatisch die Signaturerstellung anstößt. Wie im Kapitel \ref{sec:TOTPImpl} werde ich die Implementierung innerhalb der Komponenten des MVC-Frameworks beschreiben um eine gute Gegenüberstellung zu ermöglichen. Für die Authentifizierung mit \textit{U2F} ist ein kompatibler Browser und ein kompatibles Gerät notwendig. Der Browser welcher zum testen der Anwednung benutzt wurde ist \textit{Google Chrome 72.0} und das \textit{U2F} Gerät ist der \textit{Yubikey 5} von \textit{Yubico}.
 \begin{figure}[htbp]
     \centering
         \includegraphics[width=\textwidth]{Abbildungen/Ablauf_U2F_Initialisierung}
@@ -925,8 +925,147 @@ In diesem Kapitel möchte ich eine prototypische \textit{U2F} Authentifizierung 
 \end{figure}
 \clearpage
 \subsubsection{Model}
+Das \textit{User Model} wurde im Vergleich zu Kapitel \ref{sec:TOTPImpl} erweitert um die Registrierung eines oder mehrerer \textit{U2F} Geräte zu ermöglichen. Nicht verändert haben sich die Validitätsprüfungen der übergreifenden Parameter wie Name, E-Mail und Passwort. Programatisch wurde das \textit{User Model} in Beziehung mit dem neuen \textit{U2F Registration Model} gesetzt, wie in Listings \ref{lst:user.rb-u2f_Relationship} und \ref{lst:u2f_registration.rb} zu sehen. Um eine aktive \textit{U2F} Authentisierung pro Benutzer zu speichern wurde das boolsche Datenbankfeld \texttt{u2f\_activated} der User Tabelle aus Tabelle \ref{table:db-user} hinzugefügt. Gänzlich neu ist die Datenbanktabelle der \textit{U2F} Registrierungen, welche in Tabelle \ref{table:db-u2f} dargestellt ist. Die erfolgreiche Registrierung eines \textit{U2F} Geräts erstellt folglich einen Datenbankeintrag in Beziehung zum aktuell angemeldeten Benutzer. Dieser Datenbankeintrag kann zu einem späteren Zeitpunkt zur Authentifizerung des Benutzers herangezogen werden. Dazu wird anhand des \texttt{key\_handle} aus dem Request der entsprechende Eintrag gesucht und die Signatur durch den zugehörigen öffentlichen Schlüssel validiert. Weitere Anpassungen an den Models (z.\,B. \textit{Message Model}) mussten für die \textit{U2F} Authentifizerung nicht implementiert werden. 
+\begin{listing}[htpb]
+    \begin{minted}{ruby}
+        class User < ApplicationRecord
+            has_many :messages, dependent: :destroy
+            has_many :u2f_registrations, dependent: :destroy
+            has_secure_password
+        # [...]
+    \end{minted}
+    \caption{\texttt{User.rb} - Beziehung zu U2F Registrierung}
+    \label{lst:user.rb-u2f_Relationship}
+\end{listing}
+\begin{listing}[htpb]
+    \begin{minted}{ruby}
+        class U2fRegistration < ApplicationRecord
+            belongs_to :user
+        end
+    \end{minted}
+    \caption{\texttt{u2f\_registration.rb} - U2F Registrierungsmodel}
+    \label{lst:u2f_registration.rb}
+\end{listing}
+\begin{table}[htbp]
+    \begin{tabularx}{\textwidth}{ lX }
+        \toprule
+        Spalte & Beschreibung \\ 
+        \midrule
+        \texttt{certificate} & Zertifikat welches bei der Aktivierung des Gerätes generiert wurde \\
+        \texttt{key\_handle} & String als Referenz auf den verwendeten Schlüssel \\
+        \texttt{public\_key} & Öffentlicher Schlüssel der zur Authentifizerung des Benutzers dient \\
+        \texttt{counter} & Anzahl der Verwendungung \\
+        \texttt{user\_id} & ID des in Beziehung stehenden Benutzers \\
+        \texttt{created\_at} & Erstellungsdatum der Registrierung \\
+        \texttt{updated\_at} & Aktualisierungsdatum \\
+        \bottomrule
+    \end{tabularx}
+    \caption{Datenbanktabelle: U2F Registrierung}
+    \label{table:db-u2f}
+\end{table}
+\clearpage
 \subsubsection{Controller und Routen}
+Im Gegensatz zu den Models mussten umfangreiche Ergänzungen an den \textit{Controller} und \textit{Routen} vorgenommen werden. Die \textit{U2F} Registrierung erfolgt über eine neue URL (siehe Listing \ref{lst:routes.rb-u2f}), welche die Operation \texttt{create} des \textit{U2F Registrations Controller} aufruft. Ziel dieser Funktion ist die Validierung der vom Client beziehungsweise \textit{U2F} Gerät übermittelten Daten und die anschließende Speicherung in der Datenbank. Diese Operation geschieht immer im Kontext des angemeldeten Benutzers um eine konsistente Beziehung der Models herzustellen. Listing \ref{lst:u2f_registrations_controller.rb} zeigt die Funktion zur Verarbeitung eines POST Requests, welcher durch die Javascript API an die URL \texttt{/u2f\_registration} gesendet wurde. Für die \textit{U2F} Registrierung und Authentifizerung wurde die Ruby Bibiliothek \textit{ruby-u2f}\footnote{https://github.com/castle/ruby-u2f} verwendet. Meine Implementierung der Registrierung und der Authentifizerung hier stützt sich stark auf die Beispielimplementierung der Bibliothek. Mit den vom Gerät stammenden Parametern des POST Requests wird mit Hilfe der \textit{ruby-u2f} Bibliothek ein \texttt{response} Objekt erzeugt und wiederrum als Parameter an die \texttt{u2f.register!} Funktion (Siehe Zeile 7 aus Listing \ref{lst:u2f_registrations_controller.rb}) übergeben. Falls hierbei keine Fehler auftreten, können die für die Datenbank relevanten Daten aus dem \texttt{registration} Objekt extrahiert und in der Datenbank als \textit{U2F} Registrierung gespeichert werden.
+
+Die Authentifizierung mit \textit{U2F} ist ebenfalls in einem seperaten Controller implementiert und erfodert kein zugehöriges Model, da keine persistenten Daten gespeichert werden müssen. In Listing \ref{lst:routes.rb-u2f} ist zu erkennen, dass die URL \texttt{/u2f\_authentication} die \texttt{create} Funktion des \textit{U2F Authentication Controller} aufruft. Eine Authentifizerung wird analog zur Registrierung durch einen POST Request mit JSON Inhalt durch die Javascript API ausgelöst. Listing \ref{lst:u2f_authentications_controller.rb} zeigt wie aus dem JSON Objekt mit Hilfe der \textit{ruby-u2f} Bibliothek ein \texttt{response} Objekt erzeugt wird. Bestandteil dieses Objektes ist das \texttt{key\_handle}, welches zum laden eines \textit{U2F} Registrierungs Eintrags der Datenbank verwendet wird. Falls ein solches \texttt{key\_handle} noch nicht hinterlegt ist, wird der Benutzer aufgefordert zuerst ein \textit{U2F} Gerät zu registrieren. Zusammen mit der Challange, welche vor der Signaturerstellung generiert wurde (siehe Listing \ref{lst:message_controller.rb-u2f}), und der \texttt{response} als Parameter wird die \texttt{u2f.authenticate!} Funktion aufgerufen. Falls diese Funktion erfolgreich ausgeführt wurde, wird die Challange gelöscht, der Counter inkrementiert und die Nachricht mit Hilfe des privaten Schlüssels des Benutzers signiert.
+
+\begin{listing}[htpb]
+    \begin{minted}{ruby}
+        # [...]
+        post '/u2f_registration', to: 'u2f_registrations#create'
+        post '/u2f_authentication', to: 'u2f_authentications#create'
+        # [...]
+    \end{minted}
+    \caption{\texttt{routes.rb} - Definition der für \textit{U2F} notwendigen Routen}
+    \label{lst:routes.rb-u2f}
+\end{listing}
+\begin{listing}[htpb]
+    \begin{minted}{ruby}
+        class U2fRegistrationsController < ApplicationController
+            skip_before_action :verify_authenticity_token
+
+            def create
+                response = U2F::RegisterResponse.load_from_json(params[:response])
+                registration = begin
+                    u2f.register!(session[:challenges], response)
+                rescue U2F::Error => e
+                    return "Unable to register: <%= e.class.name %>"
+                ensure
+                    session.delete(:challenges)
+                end
+
+                @u2f_registration = current_user.u2f_registrations.build(certificate:         registration.certificate, key_handle: registration.key_handle, public_key: registration.public_key, counter: registration.counter)                                                                                          
+                @u2f_registration.save
+            end
+        end
+    \end{minted}
+    \caption{\texttt{u2f\_registrations\_controller.rb} - \textit{U2F} Registrierungsoperation}
+    \label{lst:u2f_registrations_controller.rb}
+\end{listing}
+\begin{listing}[htpb]
+    \begin{minted}{ruby}
+        class U2fAuthenticationsController < ApplicationController
+            skip_before_action :verify_authenticity_token
+
+            def create
+                response = U2F::SignResponse.load_from_json(params[:response])
+
+                registration = U2fRegistration.find_by_key_handle(response.key_handle)
+                return 'Need to register first' unless registration
+
+                begin
+                    u2f.authenticate!(session[:challenge],
+                                        response,
+                                        Base64.decode64(registration.public_key),
+                                        registration.counter)
+                rescue U2F::Error => e
+                    return "Unable to authenticate: <%= e.class.name %>"
+                ensure
+                    session.delete(:challenge)
+                end
+
+                registration.update(counter: response.counter)
+                sign_message
+                redirect_to root_url
+            end
+
+            private
+
+            def sign_message
+                pkey = OpenSSL::PKey::RSA.new(current_user.private_key)
+                message = Message.find(params[:message_id])
+                message.sign_content(pkey)
+                message.save
+            end
+        end
+    \end{minted}
+    \caption{\texttt{u2f\_authentications\_controller.rb} - \textit{U2F} Authentifizungsoperation}
+    \label{lst:u2f_authentications_controller.rb}
+\end{listing}
+\begin{listing}[htpb]
+    \begin{minted}{ruby}
+        # [...]
+        def initialize_u2f_authentication
+            # Fetch existing Registrations from your db
+            key_handles = U2fRegistration.all.map(&:key_handle)
+            return 'Need to register first' if key_handles.empty?
+        
+            # Generate SignRequests
+            @app_id = u2f.app_id
+            @sign_requests = u2f.authentication_requests(key_handles)
+            @challenge = u2f.challenge
+        
+            # Store challenge. We need it for the verification step
+            session[:challenge] = @challenge
+        end
+        # [...]
+    \end{minted}
+    \caption{\texttt{message\_controller.rb} - \textit{U2F} Initialisierung}
+    \label{lst:message_controller.rb-u2f}
+\end{listing}
+\clearpage
 \subsubsection{View}
+Um die Benutzerinteraktion so einheitlich wie möglich zu halten wird die \textit{U2F} Registration ebenfalls in einem Popup Fenster abgewickelt und benötigt deshalb keine eigene gerenderte View.
 \chapter{Ergebnisse}
 
 \chapter{Zusammenfassung}
