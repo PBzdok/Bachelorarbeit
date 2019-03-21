@@ -481,13 +481,13 @@ Die alternativen Authentifizierungsverfahren müssen sich für den Anwendungsber
     \item[Komplexität:] Um eine hohe Verfügbarkeit des Authentifizierungsverfahrens für den Endbenutzer sicher zu stellen, sollte das Verfahren gegenüber dem Benutzer über eine geringe Komplexität verfügen. Das bedeutet, dass der Benutzer intuitiv und mit keinen bis wenigen Hilfsmittel eine Authentifizierung durchführen kann. Ebenfalls sollte das Verfahren auch für ``nicht Technik-Affine'' benutzbar sein. Die technische Komplexität spielt hier eine zweitrangige Rolle, ist jedoch ebenfalls ein wichtiges Kriterium da die benötigte Hardware (z.\,B. Iris-Scanner) möglicherweise sehr selten in Consumer-Produkten vorzufinden ist.
     \item[Sicherheit:] Das Verfahren soll die \textit{SMS-TAN} und somit die Schwächen dieses Authentifizierungsverfahrens ersetzen. Es ist also ein Verfahren gesucht, welches sicherer ist als die SMS-TAN. Die Defizite im Übertragungsweg und im Gerät, welches die SMS empfängt, müssen somit umgangen werden.
 \end{description}
-Tabelle \ref{table:Sicherheit} bietet eine Übersicht aller gängigen Authentifizierungsverfahren aus welcher die Verfahren \textit{Time-based One-Time Passwörter}, \textit{Universal Second Factor} und \textit{Biometrie} anhand ihrer Eignung ausgewählt wurden.
+Tabelle \ref{table:Sicherheit} bietet eine Übersicht aller gängigen Authentifizierungsverfahren aus welcher die Verfahren \textit{Time-based One-Time Passwörter} und \textit{Universal Second Factor} anhand ihrer Eignung ausgewählt wurden.
 
 Das \textit{Time-based One-Time Passwört} eignet sich besonders gut da keine Übertragung an das mobile Gerät, mit Ausnahme der initialen Geheimnisvereinbarung, stattfinden muss. Somit sind die Schwächen der \textit{SMS-TAN} in Hinsicht auf den Übertragungskanal umgangen. Ebenfalls kann man mit höherer Sicherheit sagen, dass das Gerät auf welchem der Passwortgenerator ausgeführt wird im Besitz des Benutzers ist, da es nachträglich nicht möglich ist einen zweiten Passwortgenerator zu initialisieren. Jedoch ist es möglich bei der Einrichtung des \textit{Time-based One-Time Passwört} mehrere Geräte zu initialisieren. Durch das Sandboxing von Anwendungen ist ebenfalls ein Zugriff durch dritte Anwendungen unterbunden. Zudem ist das Verfahren Benutzerfreundlich und sehr übersichtlich was die technische Komplexität angeht (wie im nächsten Kapitel dargestellt).
 
 Einen ebenfalls hohen Sicherheitsstandard bietet der \textit{Universal Second Factor}, welcher es dem Benutzer ermöglicht sich auch durch Besitztum zu authentifizieren. Dieses Verfahren basiert auf kleinen kryptographischen Geräten, welcher zur Authentisierung benutzt werden können. Anders wie das \textit{Time-based One-Time Passwört} verwendet dieses Verfahren ein Public-Key-Kryptographiesystem, wobei die privaten Schlüssel sicher im Gerät gespeichert wird. Diese Eigenschaft macht es unmöglich ein zweites Gerät mit den selben Eigenschaften herzustellen oder zu kopieren, somit hat dieses Verfahren einen bedeutenden Vorteil gegenüber anderen Authentifizierungsverfahren durch Besitztum. Ebenfalls ist es nicht möglich Software oder ähnliches auf diesem Gerät auszuführen, was Malware ausschließt. Der \textit{Universal Second Factor} verwendet zur Authentifizierung ein \textit{Zero Knowledge Protokoll} durch ein Challenge-Response Vorgang, welches Man-In-The-Middle Angriffe unterbinden kann. Dieses Verfahren ist auch für den Benutzer einfach zu bedienen, da er in der Regel nur ein USB-Stick ähnliches Gerät anschließen und einen Knopf berühren muss. Diese simple Methodik wird durch den \textit{U2F} Standard der \textit{FIDO Alliance} ermöglicht.
 
-Biometrische Verfahren sind in der Regel am benutzerfreundlichsten wie in Kapitel \ref{sec:AuthentifizierungVergleich} beschrieben. Da viele moderne Smartphones mit zuverlässigen Fingerabdrucksensoren ausgestattet sind eignen sich diese hervorragend zur Authentifizierung eines Benutzers. Der Fingerabdruck des Menschen ist bekanntlich einmalig und kann eine Person deshalb zweifelsfrei identifizieren. Biometrische Authentifizierungsverfahren durch Fingerabdrücke können ähnlich wie der \textit{Universal Second Factor} durch ein Public-Key-Kryptosystem implementiert werden und von dessen Eigenschaften profitieren. So wird ebenfalls ein Challange-Response Protokoll verwendet um den Benutzer zu authentifizieren, dazu muss der Benutzer den Zugriff auf den privaten Schlüssel, welche auf dem Endgerät gespeichert sind, durch seinen Fingerabdruck gewähren.
+Biometrische Verfahren sind in der Regel am benutzerfreundlichsten wie in Kapitel \ref{sec:AuthentifizierungVergleich} beschrieben. Da viele moderne Smartphones mit zuverlässigen Fingerabdrucksensoren ausgestattet sind eignen sich diese hervorragend zur Authentifizierung eines Benutzers. Der Fingerabdruck des Menschen ist bekanntlich einmalig und kann eine Person deshalb zweifelsfrei identifizieren. Biometrische Authentifizierungsverfahren durch Fingerabdrücke können ähnlich wie der \textit{Universal Second Factor} durch ein Public-Key-Kryptosystem implementiert werden und von dessen Eigenschaften profitieren. So wird ebenfalls ein Challange-Response Protokoll verwendet um den Benutzer zu authentifizieren, dazu muss der Benutzer den Zugriff auf den privaten Schlüssel, welche auf dem Endgerät gespeichert sind, durch seinen Fingerabdruck gewähren. Die Implementierung eines solchen Systems, zusätzlich zur eigentlichen Webanwendung würde den Rahmen dieser Arbeit jedoch sprengen. Ebenfalls setzt eine solche Implementierung ein Smartphone mit Fingerabdruckscanner und sicherem Speicher vorraus. Durch die Verwendung eines Public-Key Kryptographiesystems ähnelt dieses Authentifizierungsverfahren sehr \textit{U2F}. Aus diesen Gründen wird die biometrische Authentifizierung im folgenden Kapitel nicht weiter evaluiert.
 
 \chapter{Experimentelle Evaluation}
 Sicherheitskritische Anwendung wie die \textit{Handy-Signatur} erfordern eine \emph{starke} Authentifizierung. Typischerweise wird eine solche Authentifizierung durch eine Zwei- oder Multi-Faktor Authentifizierung implementiert. Eine Kombination der in Kapitel \ref{sec:Authentifizierung} vorgestellten Authentifizierungsverfahren erhöht das Sicherheitsniveau einer Anwendung erheblich. In den meisten Fällen wird von Service-Providern eine Kombination von üblicher Passwortauthentifizierung und \textit{SMS-TAN} benutzt \cite{fido17}. Die \textit{SMS-TAN} ist wie in Kapitel \ref{sec:smstan-problematik} erläutert jedoch keine optimale Wahl für besonders gefährdete Anwendungsbereiche wie die \textit{Handy-Signatur}.
@@ -897,7 +897,7 @@ Die Authentifizierung mit einem \textit{U2F} Gerät erfordert im ersten Schritt 
 
 \begin{figure}[htbp]
     \centering
-        \includegraphics[width=\textwidth]{Abbildungen/Ablauf_U2F}
+        \includegraphics[width=\textwidth]{Abbildungen/yubico_u2f_flow}
     \caption{Schematischer Ablauf der U2F Authentifizierung \cite{u2fTech}}
     \label{fig:U2F-Auth}
 \end{figure}
@@ -914,13 +914,13 @@ In diesem Kapitel möchte ich eine prototypische \textit{U2F} Authentifizierung 
 \begin{figure}[htbp]
     \centering
         \includegraphics[width=\textwidth]{Abbildungen/Ablauf_U2F_Initialisierung}
-    \caption{Schematischer Ablauf der U2F Initialisierung}
+    \caption{Schematischer Ablauf der U2F Initialisierung in der Webanwendung}
     \label{fig:Authwebapp_u2f_init}
 \end{figure}
 \begin{figure}[htbp]
     \centering
         \includegraphics[width=\textwidth]{Abbildungen/Ablauf_U2F}
-    \caption{Schematischer Ablauf der U2F Authentifizierung}
+    \caption{Schematischer Ablauf der U2F Authentifizierung in der Webanwendung}
     \label{fig:Authwebapp_u2f_auth}
 \end{figure}
 \clearpage
@@ -1167,6 +1167,7 @@ Möchte der Benutzer eine Nachricht signieren und hat wie oben beschrieben die R
     \caption{\texttt{\_u2f\_authentication\_modal.html.erb} - Front-End der \textit{U2F} Authentifizerung}
     \label{lst:u2f_auth_modal.html.erb}
 \end{listing}
+
 \chapter{Ergebnisse}
 
 \chapter{Zusammenfassung}
